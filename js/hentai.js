@@ -9,7 +9,7 @@ window.$ = window.jQuery = require('./js/extend/jquery-1.11.3.js');
 global.$ = window.$;
 global.Service = require('Service');
 
-/*éŒ¯èª¤è™•ç†*/
+/*åeÕ`ÌÀí*/
 process.on('uncaughtException', function (er) {
   console.log(er.stack)
 });
@@ -28,7 +28,7 @@ window.addEventListener('error' ,function(errEvent){
 /*--------*/
 
 function Hentai($){
-  global.$ = $; // å®šç¾©å…¨åŸŸ
+  global.$ = $; // ¶¨ÁxÈ«Óò
   var fs = require('fs'); // require only if you don't already have it
   var mkdirp = require('mkdirp');
   var request = require('request');
@@ -64,6 +64,9 @@ function Hentai($){
   this.Menu        = require( PATH.js + 'menu');
   this.viewer      = require( PATH.js + 'viewer');
   var t = this;
+  var search = {
+    g : /http:\/\/exhentai.org\/g\/+(\d*)\/[A-a1-9].*\//g
+  };
   function alert(data){
       /*
     if(typeof data == 'object')
@@ -78,7 +81,7 @@ function Hentai($){
     };
     else {
       var msg = {
-          title : "æç¤º!",
+          title : "ÌáÊ¾!",
           message : data,
           detail : null,
           width : 440,
@@ -98,7 +101,7 @@ function Hentai($){
             icon: ".\\stylesheet\\icon.png",
             body: data
         };  
-      var notification = new Notification("æç¤º",options);
+      var notification = new Notification("ÌáÊ¾",options);
         notification.onclick = function () {
             notification.close();
         }
@@ -122,7 +125,7 @@ function Hentai($){
       setting = require(nwDir+'/setting.json');
     }
     catch (e) {
-      alert({title:'æ­¡è¿ä½¿ç”¨!',message:'ç¬¬ä¸€æ¬¡ä½¿ç”¨å»ºè­°è‡³è¨­å®šèª¿æ•´ä¸‹è¼‰è·¯å¾‘'});
+      alert({title:'šgÓ­Ê¹ÓÃ!',message:'µÚÒ»´ÎÊ¹ÓÃ½¨×hÖÁÔO¶¨Õ{ÕûÏÂİdÂ·½'});
       save_setting();
     };
 
@@ -183,24 +186,29 @@ function Hentai($){
         change_page($(this).attr('data-index'));
       };
     });
-    $('#detail-download').bind('click',function(){//ä¸‹è¼‰
+    $('#detail-download').bind('click',function(){//ÏÂİd
       add_view3();
       change_page(3);
     });
     
-    $('#detail-view').bind('click',function(){ //é–±è®€
+    $('#detail-view').bind('click',function(){ //é†×x
       t.viewer.openView(data.nowdata);
     });
 
     $('#search-bar').bind('keyup',function(e){
       if(e.keyCode==13){
-        $('#view-5 .list-item[id=""]').remove();
-        $('.main-menu li[data-index=5]').attr('enable','true');
-        change_page(5);
-        search_page = 1;
-        search_to_end = false;
-        load_search(search_page-1);
-        //load_detail($(this).attr('data-url'));
+        var url = $('#search-bar').val().trim().match(search.g) ;
+        if( url ){ 
+          load_detail( url[0] );
+        }else{
+          $('#view-5 .list-item[id=""]').remove();
+          $('.main-menu li[data-index=5]').attr('enable','true');
+          change_page(5);
+          search_page = 1;
+          search_to_end = false;
+          load_search(search_page-1);
+          //load_detail($(this).attr('data-url'));
+        };
       };
     });
     $('#view4-dir-view-path').click(function(){
@@ -215,16 +223,16 @@ function Hentai($){
         setting.path = pa + '/';
         $('#view4-dir-view-path').val(setting.path);
         save_setting();
-        alert('è¨­ç½®å®Œæˆ');
+        alert('ÔOÖÃÍê³É');
       };
       /*
       try{
         var stats = fs.lstatSync($('#view4-dir-path').val()+'\\');
         setting.path = $('#view4-dir-path').val()+'\\';
-        alert('è¨­ç½®å®Œæˆ');
+        alert('ÔOÖÃÍê³É');
         save_setting();
       }catch(e){
-        alert('ä½ç½®ä¸å­˜åœ¨ï¼ï¼');
+        alert('Î»ÖÃ²»´æÔÚ£¡£¡');
       };
       */
     });
@@ -260,11 +268,11 @@ function Hentai($){
     dat = data.nowdata;
 
     if(dat){
-      if(!id){/*é‡è¤‡åˆ¤æ–·*/
+      if(!id){/*ÖØÑ}ÅĞ”à*/
         for(var i in data.data){
           if(data.data[i]&&data.data[i].id&&dat.id==data.data[i].id){
             data.data[i].pause = false;
-            $('#download-'+i+' .button-p-s').text('æš«åœ');
+            $('#download-'+i+' .button-p-s').text('•ºÍ£');
             download_file(i);
             return false;
           };
@@ -304,7 +312,7 @@ function Hentai($){
         html.attr('id','download-'+id);
         $(html).children('.board-right').children('.list-state').text(dat.nowdownload+'/'+dat.max);
         $(html).children('.board-right').children('.download-bar').children('.progress').css('width',(dat.nowdownload/dat.max)*100+'%');
-        bt_p_s.attr('data-id',id).text('ç¹¼çºŒ');
+        bt_p_s.attr('data-id',id).text('À^Àm');
         if(dat.max==dat.nowdownload)
         bt_p_s.remove();
       };
@@ -317,7 +325,7 @@ function Hentai($){
       if(data.data[id].pause)
       data.data[id].pause = false;
       else data.data[id].pause = true;
-      $('#download-'+id+' .button-p-s').text(data.data[id].pause?'ç¹¼çºŒ':'æš«åœ');
+      $('#download-'+id+' .button-p-s').text(data.data[id].pause?'À^Àm':'•ºÍ£');
       download_file(id);
     };
   };
@@ -354,11 +362,11 @@ function Hentai($){
     });
     $('#detail-time').text(dat.information.posted);
     $('#detail-language').text(dat.information.language);
-    //è©•è«–
+    //ÔuÕ“
     $('#detail-comments').html($('#detail-comment-view')[0].outerHTML);
     for(var i in dat.comment){
       var html = $($('#detail-comment-view')[0].outerHTML);
-      html.find('.comment-user span').text(dat.comment[i].User+''+(dat.comment[i].isupl?'(ä¸Šå‚³è€…)':''));
+      html.find('.comment-user span').text(dat.comment[i].User+''+(dat.comment[i].isupl?'(ÉÏ‚÷Õß)':''));
       html.find('.comment-msg span').html(dat.comment[i].msg).find('a').bind('click',function(e){
         e.preventDefault();
         if($(this).attr('href').match('http://exhentai.org/g/'))
@@ -484,12 +492,12 @@ function Hentai($){
               download_file(id);
               else{
                 $('#download-'+id+' .button-p-s').remove();
-                alert({title:'ä¸‹è¼‰å®Œæˆ!',message:data.data[id].name+'ä¸‹è¼‰å®Œæˆï¼Œå…± '+data.data[id].max+' é '});
+                alert({title:'ÏÂİdÍê³É!',message:data.data[id].name+'ÏÂİdÍê³É£¬¹² '+data.data[id].max+' í“'});
               };
             });
         });
     };
-        //});//ä¸‹è¼‰æª”æ¡ˆ
+        //});//ÏÂİd™n°¸
   };
   var log = function(d){
     if(setting.debug)
@@ -500,7 +508,7 @@ function Hentai($){
     request.head(uri, function(err, res, body){
       if(err)
       if(err.statusMessage!='OK'){
-        log('ä»¥ä¸‹err');
+        log('ÒÔÏÂerr');
         log(err);
         data.data[id].nowdownload--;
         download_file(id);
