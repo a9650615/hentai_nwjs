@@ -24,3 +24,7 @@ http://nwjs.io/
  2. HTML,Jquery,CSS 程式介面
  3. mkdirp (node module) 建立資料夾
  4. request (node module) 發送請求
+
+
+----------
+程式碼好亂啊 感覺該重構了
