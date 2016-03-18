@@ -6,9 +6,4 @@
       "icon": "/stylesheet/icon.png",
       "toolbar": true
   }
-    /*,
-  "dependencies": "",
-  "devDependencies": {
-    "electron-packager": "^5.1.0"
-  }*/
 }
