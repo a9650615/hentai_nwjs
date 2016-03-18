@@ -1,0 +1,122 @@
+
+<html ng-app="hentai">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>髒 超髒 都可以髒</title>
+    <meta charset="utf-8"></meta>
+    <!--<script src="js\extend\angular.min.js"></script>-->
+    <!--<script src="js\view.js"></script>-->
+    <!--<script src="js\extend\mootools-yui-compressed.js"></script>-->
+    <script src="js\hentai.js"></script>
+    <link rel="stylesheet" href="stylesheet/font-awesome/css/font-awesome.min.css">
+    <link rel=stylesheet type="text/css" href="stylesheet/main.css"/>
+    <link rel=stylesheet type="text/css" href="stylesheet/beauty.css"/>
+  </head>
+  <body ng-controller="body">
+
+    <script>
+    console.log(process.memoryUsage());
+    </script>
+    <!--header-->
+    <div id="header">
+        <ul class="main-menu">
+          <li enable="true" data-index="1">瀏覽</li>
+          <li enable="false" data-index="2">詳細</li>
+          <li enable="true" data-index="3">下載</li>
+          <li enable="true" data-index="4">設定</li>
+          <li enable="false" data-index="5"><input id="search-bar" placeholder="輸入關鍵字" type="search"></li>
+        </ul>
+    </div>
+    <!--header End-->
+    <!--List -->
+    <!--List 1-->
+    <div class="view list" id="view-1" ng-controller="view-1" data-index="1">
+      <div id="view-1-view" class="list-item list-auto view-detail" style="display:none;">
+        <div class="board-left">
+          <div class="list-clover-image"></div>
+        </div>
+        <div  class="board-right">
+          <div class="list-name wrap"><span class="text">Name</span></div>
+          <div class="list-rank"><i class="fa fa-star"></i><span class="text">Rank</span></div>
+          <div class="list-type"><i class="fa fa-file-o"></i><span class="text">Type</span></div>
+        </div>
+      </div>
+    </div>
+    <!--List 2-->
+    <div class="view" data-index="2">
+      <div id="detail-front" class="container">
+        <div class="board-left">
+          <div>
+            <div id="detail-image" class="list-clover-image" ></div>
+          </div>
+          <div>
+            <button id="detail-download" class="btn-beat">下載閱讀畫質</button>
+            <button id="detail-view" class="btn-beat">閱讀</button>
+            <!--<button id="" class="btn-beat">下載原畫質(還不能用~~)</button>-->
+          </div>
+        </div>
+        <div class="board-right">
+          <div id="detail-name" class="wrap" title="">[Mainichi Sono Basho Shinogi (Kuroinu)] Chuunibyou Dattakedo! (Chuunibyou demo Koi ga Shitai!) [Thai] [Tomkung_54]</div>
+          <div id="detail-time">2015-10-09 18:02</div>
+          <div id="detail-language">Language</div>
+          <div></div>
+        </div>
+      </div>
+      <div id="detail-comments" class="container">
+        <div id="detail-comment-view" class="comment">
+          <div class="comment-user"><span>{{User}}</span></div>
+          <div class="comment-msg"><span>{{Message}}</span></div>
+          <div class="comment-log"><span>{{Log}}</span></div>
+        </div>
+      </div>
+      <div id="detail-background"></div>
+    </div>
+    <!--List 3-->
+    <div class="view list" id="view-3" data-index="3">
+      <div id="view-3-view" class="list-item" style="display:none;">
+        <div class="board-left">
+          <div class="list-clover-image"></div>
+        </div>
+        <div  class="board-right">
+          <div class="list-name wrap">Name</div>
+          <div class="download-bar">
+            <div class="progress" style="width:0px;"></div>
+          </div>
+          <div class="list-state">State</div>
+          <div class="list-button">
+            <button class="button-p-s btn-beat">暫停</button>
+            <button class="button-delete btn-beat">刪除紀錄</button>
+            <button class="button-open btn-beat">開啟資料夾位置</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--List 4-->
+    <div class="view" data-index="4">
+      <div>
+        <div></div>
+        <div class="setting_list">
+          <div>下載路徑</div>
+          <div class="setting_item">
+            <input readonly id="view4-dir-view-path">
+            <input type="file" style="display:none" nwworkingdir="C:" nwdirectory id="view4-dir-path"><!--readonly-->
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--List 5-->
+    <div class="view list" id="view-5" ng-controller="view-5" data-index="5">
+      <div id="view-5-view" class="list-item list-auto view-detail" style="display:none;">
+        <div class="board-left">
+          <div class="list-clover-image"></div>
+        </div>
+        <div  class="board-right">
+          <div class="list-name wrap"><span class="text">Name</span></div>
+          <div class="list-rank"><i class="fa fa-star"></i><span class="text">Rank</span></div>
+          <div class="list-type"><i class="fa fa-file-o"></i><span class="text">Type</span></div>
+        </div>
+      </div>
+    </div>
+    <!--List End-->
+  </body>
+</html>

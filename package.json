@@ -1,0 +1,14 @@
+{
+  "name": "hentai",
+  "version": "0.085",
+  "main": "index.html",
+  "window":{
+      "icon": "/stylesheet/icon.png",
+      "toolbar": true
+  }
+    /*,
+  "dependencies": "",
+  "devDependencies": {
+    "electron-packager": "^5.1.0"
+  }*/
+}

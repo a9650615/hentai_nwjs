@@ -1,0 +1,174 @@
+body{
+	margin: 0px;
+	background: #000;
+	font-family: Noto-sans;
+	color: white;
+}
+
+.container{
+	width: 80%;
+	max-width: 1080px;
+	margin: 0px auto;
+}
+
+/* 字體 */
+
+@font-face {
+    font-family: Noto-sans;
+    src: url(fonts\\NotoSansCJKtc-Light.otf);
+}
+
+#viewer,#loading,#loading-text,
+#loading-image,
+#loading_background,
+#loading-loadingbar{
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	top: 0px;
+	left: 0px;
+	right: 0px;
+	overflow: hidden;
+}
+
+/*
+ * 讀取區
+ */
+#loading{
+	z-index: 5;
+	background: rgba( 0, 0, 0, 0.8);
+	text-align: center;
+}
+
+#loading_background{
+	z-index: 1;
+	/*background: url('test.png') center no-repeat;*/
+	background-size: cover;
+	-webkit-filter: blur(5px);
+	opacity: 0.3;
+	box-shadow: 0px 0px 40% 1px #111 inset;
+}
+
+#loading-image{
+	z-index: 10;
+	height: 30%;
+	width : 12%;
+	min-width: 120px;
+	min-height: 170px;
+	top: 0px;
+	bottom: 0px;
+	margin: auto;
+	background-size: cover;
+	/*background: url('test.png') center no-repeat;*/
+}
+
+#loading-loadingbar{
+	width : 12%;
+	min-width: 120px;
+	margin: auto;
+	top: 32%;
+	bottom: 0px;
+	height:5px;
+	background:rgba( 255, 255, 255, 0.2);
+	box-shadow: 0px 0px 2px .1px inset #111;
+}
+
+#loading-progress{
+	height: 5px;
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	background:rgba( 255, 255, 255, 0.7);
+	transition: width .4s ease-in;
+}
+
+#loading-text{
+	height: 24px;
+	top: 36%;
+	bottom: 0px;
+	margin: auto;
+}
+
+/*
+ * 視圖區
+ */
+
+#viewer{
+	text-align: center;
+}
+
+#image-view{
+	position: absolute;
+	left:0px;
+	right: 0px;
+	top: 0px;
+	bottom:0px;
+	height: 100%;
+	margin: auto;
+}
+/*
+ *	控制區
+ */
+#control-bar{
+	z-index: 99;
+	background: rgba( 10, 10, 10, 0.5);
+	position: fixed;
+	bottom: 0px;
+	width: 100%;
+	height: 40px;
+	padding: 0px 0px 0px 0px;
+	line-height: 23px;
+}
+
+#control-bar .fa:before{
+	color: white;
+}
+
+.control-btn{
+	cursor: pointer;
+}
+
+#control-bar .control-btn:first-child{
+	/*border-left: rgb(37,45,61) 1px solid;*/
+}
+
+#control-bar .control-btn{
+	padding: 10px;
+	height: 20px;
+	position: relative;
+	display: inline-block;
+	/*border-right: rgb(37,45,61) 1px solid;*/
+	margin: 0px;
+	/*box-shadow: rgb(37,45,61) 0px 0px 1px .3px inset;*/
+	float: left;
+	-webkit-mask-image: -webkit-radial-gradient(circle,white 100%,black 100%);
+	border-radius: 25px;
+}
+
+/*
+ * 控制區右側
+ */
+#controler-left,#controller-right{
+	display: inline-block;
+}
+
+#page-view{
+	color: white;
+	line-height: 40px;
+}
+
+#s-loadingbar{
+	display: inline-block;
+	width: 100px;
+	height: 5px;
+	background:rgba( 255, 255, 255, 0.2);
+	position: relative;
+}
+
+#s-loading-progress{
+	position: absolute;
+	left: 0px;
+	height: 5px;
+	background: rgba( 255, 255, 255, 0.7);
+	transition: width .4s ease-in;
+}

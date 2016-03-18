@@ -1,0 +1,255 @@
+body{
+  font-family: "微軟正黑體";
+  font-size: 18px;
+  margin: 0px;
+  overflow: hidden;
+  background: #eeeeee;
+}
+#header{
+  position: fixed;
+  top:0px;
+  width: 100%;
+  border-bottom: 1px #ccc solid;
+  margin: 0px 0px 10px 0px;
+  background: #ffffff;
+  z-index: 9;
+}
+.main-menu{
+  margin: 0px;
+}
+.main-menu li[enable=false]{
+  color: #ccc;
+}
+.main-menu li{
+  display: inline-block;
+  padding: 10px 10px;
+  cursor: pointer;
+  border-bottom: rgba(0,0,0,0) 3px solid;
+}
+.main-menu li[enable=true]:hover,.main-menu li.selected{
+  border-bottom: rgb(102, 204, 255) 3px solid;
+}
+.view{
+  margin-top:50px;
+  height: 100%;
+  width: 100%;
+  display: block;
+  overflow: auto;
+  position: absolute;
+}
+.list{
+
+}
+#header *::selection,.list *::selection{
+  background: rgba(0,0,0,0);
+}
+.list-item{
+  min-height: 150px;
+  cursor: pointer;
+  display: block;
+  margin: 2.5%;
+  width: 95%;
+  background: #ffffff;
+  box-shadow: #ccc 0px 0px 1px .5px;
+  transition: all .3s;
+}
+.list-item:hover{
+  box-shadow: #ccc 0px 0px 2px 1px;
+}
+.board-left{
+  display: inline-block;
+  width:29%;
+  vertical-align: top;
+  position: relative;
+}
+.board-right{
+  display: inline-block;
+  width:67.5%;
+  padding: 1%;
+  vertical-align: top;
+}
+.list-clover-image{
+  display: inline-block;
+  width: 100%;
+  height: 160px;
+  max-width: 500px;
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+}
+.wrap{
+  width: 100%;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.list-name,.list-type,.list-rank{
+  padding-left: 10px;
+}
+.list-name{
+  border-bottom: #ccc 1px solid;
+  width: 95%;
+  margin:1.5%;
+  padding: 1%;
+  display: block;
+}
+span.text{
+  padding-left: 10px;
+}
+#detail-comment-view{
+  display: none;
+}
+.download-bar{
+  background-color: #cccccc;
+  height: 10px;
+  width: 96%;
+  margin: 0px 2%;
+  display: block;
+  margin-top:10px;
+}
+.progress{
+  height: 100%;
+  display: block;
+  background: rgb(204, 255, 102);
+}
+.setting_list{
+  padding:20px 10px;
+}
+#view4-dir-view-path{
+  width:97%;
+  border: none;
+  padding: 10px 1.5%;
+  background-color: rgba(0,0,0,0);
+  font-size: 14px;
+}
+#detail-image{
+  height: 250px;
+  position:absolute;
+  top: -150px;
+}
+.setting_item *{
+    cursor: pointer;
+}
+.setting_item:hover{
+  background: #ccc;
+}
+#detail-background{
+  position: absolute;
+  top: 20px;
+  left: 0;
+  width: 100%;
+  height: 70%;
+  background-size: cover;
+  background-position: top center;
+  background-repeat: no-repeat;
+  -webkit-filter: grayscale(0.5) blur(10px);
+  z-index: 1;
+}
+.container{
+  width: 87%;
+  max-width: 750px;
+  min-width: 400px;
+  left: 0px;
+  right: 0px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 3%;
+}
+#detail-front{
+  z-index: 9999;
+  position: relative;
+  display: block;
+  top: 340px;
+  background: #ffffff;
+  box-shadow: #ccc 0px -2px 6px .2px;
+  margin-bottom: 30px;
+  transform: 1s ease all;
+  height: auto;
+}
+#detail-comments{
+  position: relative;
+  background: white;
+  box-shadow: #222 0px 0px 1px .1px;
+  top: 350px;
+  font-size: 0.9em;
+  margin-bottom: 20px;
+}
+.comment-user,.comment-user>span{
+ color: #27ae60;
+ padding:2px;
+}
+.comment-msg{
+  padding: 1px 5px;
+}
+.comment-log{
+  text-align: right;
+  font-size: 0.6em;
+}
+#detail-download{
+  margin-top: 120px;
+}
+#search-bar{
+  padding: 2px 10px;
+  font-size: 18px;
+  border: none;
+  border-bottom: #cccccc 1px solid;
+  outline:none;
+  background: rgba(0,0,0,0);
+  width: 100%;
+}
+#search-bar:focus{
+  border-bottom: rgb(102, 204, 255) 1px solid;
+}
+.list-item.list-auto:active{
+  background: rgba(200,200,200, 0.92);
+}
+@media screen and (min-width: 800px){
+  .list-auto{
+    width: 30%;
+    margin: 1.5%;
+    float: left;
+  }
+  .list-auto .board-left{
+    width: 100%;
+    display: block;
+    height: 160px;
+  }
+  .list-auto .board-right{
+    width:100%;
+    display: block;
+  }
+  .view{
+    margin-top:0px;
+    height: 100%;
+    width: 70%;
+    display: inline-block;
+    left: 30%;
+  }
+  #header{
+    width: 30%;
+    left:0px;
+    height: 100%;
+    margin:0px;
+    padding: 0px;
+    background: #21252b;
+    color: #ccc;
+  }
+  .main-menu{
+    padding-top: 30px;
+  }
+  .main-menu li[enable=false]{
+    color: #707C74;
+  }
+  .main-menu li{
+    display: list-item;
+    list-style: none;
+    width: 85%;
+    padding-right:5%;
+  }
+  #search-bar{
+    color:  #707C74;
+  }
+  #detail-front{
+    width: 80%;
+  }
+}

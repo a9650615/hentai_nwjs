@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>閱讀器</title>
+	<link rel="stylesheet" href="../stylesheet/font-awesome/css/font-awesome.min.css">
+	<link rel="stylesheet" href="../stylesheet/viewer.css">
+	<script type="text/javascript" src="../js/extend/jquery-2.1.4.min.js"></script>
+	<script type="text/javascript" src="../js/viewer.js"></script>
+</head>
+<body>
+	<div id="loading">
+		<div id="loading-image"></div>
+		<div id="loading-loadingbar"> 
+			<div id="loading-progress"></div>
+		</div>
+		<div id="loading-text"> {{percent}} </div>
+		<div id="loading_background"></div>
+	</div>
+	<div id="viewer">
+		<div id="view-control">
+			<img id="image-view" >
+		</div>
+	</div>
+	<div id="control-bar">
+		<div class="container">
+			<div id="control-left">
+				<span id="btn-fuls" class="control-btn"><i class="fa fa-expand fa-lg"></i></span> <!--全螢幕-->
+				<!--<span class="control-btn"><i class="fa fa-plus fa-lg"></i></span>--> <!--放大-->
+				<!--<span class="control-btn"><i class="fa fa-minus fa-lg"></i></span>--> <!--縮小-->
+				<span id="btn-last" class="control-btn"><i class="fa fa-chevron-left fa-lg"></i></span> <!--上一張-->
+				<span id="btn-next" class="control-btn"><i class="fa fa-chevron-right fa-lg"></i></span> <!--下一張-->
+			</div>
+			<div id="control-right">
+				<span id="page-view"> {{NowPage}} / {{TotalPage}}</span>
+				<span id="s-loading" style="float: right; line-height:35px;">
+					<span id="s-loadingbar">
+						<span id="s-loading-progress"></span>
+					</span>
+					<span id="s-load-text">{{percent}}</span>
+				</span>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
