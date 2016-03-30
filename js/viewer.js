@@ -1,8 +1,14 @@
 
-var gui = require('nw.gui');
-var win = gui.Window.get();
+//var gui = require('nw.gui');
+//var win = gui.Window.get();
+const remote = require('electron').remote;
+const BrowserWindow = remote.BrowserWindow;
+const ipcRenderer = require('electron').ipcRenderer;
+window.$ = window.jQuery = require('../js/extend/jquery-1.11.3.js');
 var request = require('request').defaults({ encoding: null });
-var data;
+const win = remote.getCurrentWindow();
+
+var data,dir;
 
 var config = {
 	progress:{
@@ -21,11 +27,19 @@ var temp = {
 	list_get : 0,
 	list_finish:false
 };
-
-var	data_loader = require('data_loader');
+console.log(global.__dir);
+var  data_loader ;
 
 var Viewer = {
+	get_data:  function(){
+	/*console.log('get data...');
+	  ipcRenderer.send('get-read-data', 'test');
+	  ipcRenderer.on('send-read-data', function(event, arg) {
+	    console.log(arg); // prints "pong"
+	  });*/
+	},
 	init : function(){
+		data_loader = require( dir+'/js/module/data_loader/index.js');
 		data_loader.parseImage( data.data.img, null, function( url){
 			//console.log(url);
 			$('#loading-image').css({
@@ -43,13 +57,16 @@ var Viewer = {
 	},
 	event 		: function(){
 		$('#btn-fuls').bind('click',function(){
+			console.log(win);
 			if(!config.fullscreen){
 				$(this).find('i').addClass('fa-compress').removeClass('fa-expand');
-				win.enterFullscreen();
+				//win.enterFullscreen();
+				win.setFullScreen(true);
 			}
 			else{
 				$(this).find('i').addClass('fa-expand').removeClass('fa-compress');
-				win.leaveFullscreen();
+				//win.leaveFullscreen();
+				win.setFullScreen(false);
 			};
 			config.fullscreen = !config.fullscreen;
 		});
