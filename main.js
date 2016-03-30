@@ -1,8 +1,8 @@
 var app = require('app');  // Module to control application life.
 var BrowserWindow = require('browser-window');  // Module to create native browser window.
-var window_controll = require(__dirname+'/window_controll');
-var Toaster = require('electron-toaster');
-var toaster = new Toaster();
+//var window_controll = require(__dirname+'/window_controll');
+//var Toaster = require('electron-toaster');
+//var toaster = new Toaster();
 // Report crashes to our server.
 require('crash-reporter').start();
 
@@ -25,7 +25,7 @@ app.on('window-all-closed', function() {
 app.on('ready', function() {
   // Create the browser window.
   mainWindow = new BrowserWindow({width: 700, height: 500, 'min-height': 300,  'min-width': 550});
-  toaster.init(mainWindow);
+  //toaster.init(mainWindow);
   // and load the index.html of the app.
   mainWindow.loadUrl('file://' + __dirname + '/index.html');
 
