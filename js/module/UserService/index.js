@@ -19,7 +19,8 @@ exports.AddToFavorite = ( id, token, data)  => {
 				form: {
 					favcat: data.favcat,
 					favnote: data.favnote,
-					submit: 'Add to Favorites'
+					submit: 'Add to Favorites',
+					update: 1
 				},
 				headers: {
 					'Cookie':  global.Setting.UserCookie

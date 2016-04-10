@@ -20,9 +20,10 @@ global.Setting.UserCookie = localStorage.getItem('UserCookie')?localStorage.getI
 var LoginContent = require('./js/view/login/login.js');
 
 /*錯誤處理*/
-/*process.on('uncaughtException', function (er) {
+process.on('uncaughtException', function (er) {
+  console.log(er);
   console.log(er.stack)
-});*/
+});
 
 window.addEventListener('error' ,function(errEvent){
    /* console.log(
@@ -32,15 +33,15 @@ window.addEventListener('error' ,function(errEvent){
               '", line:' + errEvent.lineno
     );
   */
-  errEvent.preventDefault();
+  //errEvent.preventDefault();
 })
 
 /*--------*/
-
+console.log(nwDir);
 function Hentai($){
   global.$ = $; // 定義全域
   var fs = require('fs'); // require only if you don't already have it
-  var mkdirp = require('mkdirp');
+  //var mkdirp = require('mkdirp');
   var request = require('request');
   //var remote = require("remote");
   //var ipc = require('ipc');
@@ -70,9 +71,10 @@ function Hentai($){
     id : 0,
     download_id:0
   };
+  
   global.Data.data = data;
-  this.data_loader = require( PATH.js + 'data_loader');
   this.Menu        = require( PATH.js + 'menu');
+  this.data_loader = require( PATH.js + 'data_loader');
   this.viewer      = require( PATH.js + 'viewer');
   var t = this;
   var search = {
@@ -146,6 +148,9 @@ function Hentai($){
       //console.log(setting.debug);
     if(setting.debug)
           win.showDevTools();
+    /*Load Modules*/
+    t.downloader      = require( PATH.js + 'downloader');
+    /*Load Modules*/
     events();
     change_page(1);
     load_list();
@@ -166,6 +171,7 @@ function Hentai($){
       };
     };
   };
+
   function save_setting(){
     fs.writeFile(nwDir+'/setting.json',JSON.stringify(setting));
   };
@@ -173,6 +179,7 @@ function Hentai($){
   function save_data(){
     fs.writeFile(nwDir+'/data.json',JSON.stringify(data));
   };
+
 
   function events(){
     //Login Event
@@ -188,6 +195,10 @@ function Hentai($){
       let split = data.nowdata.url.split('/');
       global.UserService.AddToFavorite( split[1], split[2], { favcat: $('#detail-favoriteid').val(),favnote:'' }).then( ( type ) => {
         console.log(type);
+        if(type==1){
+          $('#detail-addfavorite-section').hide();
+          $('#detail-removefavorite').show();
+        }
       });
     });
 
@@ -195,6 +206,10 @@ function Hentai($){
       let split = data.nowdata.url.split('/');
       global.UserService.AddToFavorite( split[1], split[2], { favcat: 'favdel',favnote:'' }).then( ( type ) => {
         console.log(type);
+        if(type==1){
+          $('#detail-addfavorite-section').show();
+          $('#detail-removefavorite').hide();
+        }
       });
     });
 
@@ -222,6 +237,11 @@ function Hentai($){
     });
     $('#detail-download').bind('click',function(){//下載
       add_view3();
+      change_page(3);
+    });
+
+    $('#detail-source-download').bind('click',function(){//下載
+      add_view3( null, null, true);
       change_page(3);
     });
     
@@ -252,7 +272,8 @@ function Hentai($){
 
     $('#view4-dir-path').on('click',function(){
         //console.log(dialog.showOpenDialog({ properties: [ 'openFile', 'openDirectory']}));
-        setting.path = dialog.showOpenDialog({ properties: [ 'openFile', 'openDirectory']}) + '/';
+        setting.path = (dialog.showOpenDialog({ properties: [ 'openFile', 'openDirectory']}) || setting.path);
+        if(setting.path.slice(-1) != '/') setting.path += '/';
         $('#view4-dir-view-path').val(setting.path);
         save_setting();
     });
@@ -300,14 +321,18 @@ function Hentai($){
     };
   };
 
-  function add_view3(d,id){
+  function add_view3(d,id, issource){
     var dat ;
-    if(d)
-    dat = d;
-    else
-    dat = data.data[data.now];
+      if(d)
+      dat = d;
+      else
+      dat = data.data[data.now];
+
     if(!dat)
     dat = data.nowdata;
+
+    if(issource)
+      dat.source = true;
 
     if(dat){
       if(!id){/*重複判斷*/
@@ -315,7 +340,7 @@ function Hentai($){
           if(data.data[i]&&data.data[i].id&&dat.id==data.data[i].id){
             data.data[i].pause = false;
             $('#download-'+i+' .button-p-s').text('暫停');
-            download_file(i);
+            t.downloader.download_file(i);
             return false;
           };
         };
@@ -349,7 +374,7 @@ function Hentai($){
       if(!d){
         html.attr('id','download-'+data.now);
         data.data[data.now] = data.nowdata;
-        download_file( data.now, function(cc){log(cc);});
+        t.downloader.download_file( data.now, function(cc){log(cc);});
         bt_p_s.attr('data-id',data.now);
       }else{
         html.attr('id','download-'+id);
@@ -369,7 +394,7 @@ function Hentai($){
       data.data[id].pause = false;
       else data.data[id].pause = true;
       $('#download-'+id+' .button-p-s').text(data.data[id].pause?'繼續':'暫停');
-      download_file(id);
+      t.downloader.download_file(id);
     };
   };
   //view 2
@@ -396,6 +421,7 @@ function Hentai($){
   function view2( dat, id){
     data.nowdata = dat;
     data.nowdata.id = id;
+    save_data();//New
     $('#header .main-menu li[data-index="2"]').attr('enable','true');
     change_page(2);
     $('#detail-name').text(dat.name);
@@ -410,17 +436,21 @@ function Hentai($){
     $('#detail-addfavorite-section').hide();
     $('#detail-removefavorite').hide();
     let split = data.nowdata.url.split('/');
-    if(localStorage.getItem('UserName'))
-    global.UserService.CheckFavorite( split[1], split[2]).then((type) => {
-          data.nowdata.isfavorite = type;
-          if(data.nowdata.isfavorite){
-            $('#detail-addfavorite-section').hide();
-            $('#detail-removefavorite').show();
-          }else{
-            $('#detail-addfavorite-section').show();
-            $('#detail-removefavorite').hide();
-          };
-    });
+    if(localStorage.getItem('UserName')){
+      $('#detail-source-download').show();
+      global.UserService.CheckFavorite( split[1], split[2]).then((type) => {
+            data.nowdata.isfavorite = type;
+            if(data.nowdata.isfavorite){
+              $('#detail-addfavorite-section').hide();
+              $('#detail-removefavorite').show();
+            }else{
+              $('#detail-addfavorite-section').show();
+              $('#detail-removefavorite').hide();
+            };
+      });
+    }else{
+      $('#detail-source-download').hide();
+    };
     
     //評論
     $('#detail-comments').html($('#detail-comment-view')[0].outerHTML);

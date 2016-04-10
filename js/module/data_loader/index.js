@@ -47,7 +47,8 @@ exports.load_url = function ( url, returnfuc){
 	request.on('error',function(e){
    		console.log("Error: \n" + e.message); 
    		console.log( e.stack );
-   		returnfuc( html, res, e);
+   		//returnfuc( html, res, e);
+   		exports.load_url( url, returnfuc);
 	});
 	request.end();
 }
@@ -155,7 +156,8 @@ var praser = {
 		this._p(html);
 		var data = {};
 		data.image = this.html.find('#img').attr('src');
-		data.fullimage = this.html.find('#i7 a').attr('href');
+		data.fullimage = this.html.find('#i7.if>a').attr('href');
+		//console.log(html);
 		//console.log('img:'+data.fullimage);
 		data.next = this.html.find('#next').attr('href');
 		data.prev = this.html.find('#prev').attr('href');

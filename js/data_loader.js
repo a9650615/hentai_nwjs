@@ -20,7 +20,7 @@ var options = {
     }
 };
 
-exports.load_url = function ( url, returnfuc){
+exports.load_url = function ( url, returnfuc, times){
 	var html = '';
 	options.path = (url?'/'+url:null) || '/';
 	//console.log(options.path);
@@ -46,6 +46,8 @@ exports.load_url = function ( url, returnfuc){
 	request.on('error',function(e){
    		console.log("Error: \n" + e.message); 
    		console.log( e.stack );
+   		if( times < 5)
+   		exports.load_url( url, returnfuc, (time)?times++:times=0);
 	});
 	request.end();
 }
