@@ -37,7 +37,6 @@ window.addEventListener('error' ,function(errEvent){
 })
 
 /*--------*/
-console.log(nwDir);
 function Hentai($){
   global.$ = $; // 定義全域
   var fs = require('fs'); // require only if you don't already have it
@@ -81,29 +80,6 @@ function Hentai($){
     g : /http:\/\/exhentai.org\/g\/+(\d*)\/[A-a1-9].*\//g
   };
   function alert(data){
-      /*
-    if(typeof data == 'object')
-    var msg = {
-        title : data.title,
-        message : data.message,
-        detail : data.detail,
-        width : 440,
-        // height : 160, window will be autosized
-        timeout : 6000,
-        focus: true // set focus back to main window
-    };
-    else {
-      var msg = {
-          title : "提示!",
-          message : data,
-          detail : null,
-          width : 440,
-          //height : 50, //window will be autosized
-          timeout : 6000,
-          focus: true // set focus back to main window
-      };
-    }
-    ipc.send('electron-toaster-message', msg);*/
       if(typeof data == 'object')
       var options = {
             icon: ".\\stylesheet\\icon.png",
@@ -360,7 +336,7 @@ function Hentai($){
       var bt_del = $(html).children('.board-right').children('.list-button').children('.button-delete');
       var bt_open = $(html).children('.board-right').children('.list-button').children('.button-open');
       bt_open.attr('data-id',id||data.now).bind('click',function(){
-        shell.showItemInFolder(setting.path+replace_path(data.data[$(this).attr('data-id')].name)+'/');
+        shell.showItemInFolder(setting.path+t.downloader.replace_path(data.data[$(this).attr('data-id')].name)+'/');
         //gui.Shell.showItemInFolder(setting.path+replace_path(data.data[$(this).attr('data-id')].name)+'/');
       });
       bt_p_s.bind('click',function(){
@@ -528,120 +504,11 @@ function Hentai($){
     };
   };
 
-  function ajax( url, success, fail){
-    /*
-    $.ajax({
-      url : url,
-      type:'get',
-      success : success,
-      error : fail
-    });*/
-  };
-  function create_path(path){
-    //var stats = fs.lstatSync(path);
-    //if (!stats.isDirectory()) {
-    //  fs.mkdir( path, 0777,function(e){console.log(e)});
-    //};
-    mkdirp(path, function(err) {
-     //path was created unless there was error
-    });
-  };
-
-  function download_file( id, func){
-    if(!data.data[id].pause){
-      create_path(setting.path+replace_path(data.data[id].name)+'/');
-      save_data();
-      /*
-      ajax(data.data[id].start,function(da){
-        //console.log(da);
-        //ajax(da.image,function(dt){
-        //  fs.writeFile( setting.path+data.data[id].name+'\\'+data.data[id].nowdownload+'.jpg',dt,func);
-      });*/
-      t.data_loader.parseData('image',
-        {
-          _url_ : data.data[id].start.replace( global.Data.data.base,'')
-        },
-        function( da, e){
-          if(e) console.log('阿斯'+e);
-          if(data.data[id].nowdownload==null)
-            data.data[id].nowdownload = 1;
-          else
-            data.data[id].nowdownload++;
-          data.data[id].start = da.next;
-          data.data[id].max = da.total*1;
-          $('#download-'+id).children('.board-right').children('.list-state').text(data.data[id].nowdownload+'/'+da.total);
-          $('#download-'+id).children('.board-right').children('.download-bar').children('.progress').css('width',(data.data[id].nowdownload/da.total)*100+'%');
-          save_file(
-            id,
-            da.image,//da.fullimage,
-            setting.path+replace_path(data.data[id].name)+'/'+data.data[id].nowdownload,
-            function(d){
-              log(d);
-              save_data();
-              if(data.data[id])
-              if(data.data[id].max>data.data[id].nowdownload)
-              download_file(id);
-              else{
-                $('#download-'+id+' .button-p-s').remove();
-                alert({title:'下載完成!',message:data.data[id].name+'下載完成，共 '+data.data[id].max+' 頁'});
-              };
-            });
-        });
-    };
-        //});//下載檔案
-  };
   var log = function(d){
     if(setting.debug)
     console.log(d);
   };
 
-  var save_file = function( id, uri, filename, callback){
-    request(uri, function(err, res, body){
-        if(err)
-        if(err.statusMessage!='OK'){
-          log('以下err');
-          log(err);
-          data.data[id].nowdownload--;
-          download_file(id);
-        }
-        var type = 'jpg';
-        if(res){
-        log('content-type:', res.headers['content-type']);
-        log('content-length:', res.headers['content-length']);
-        type=res.headers['content-type'].replace('image/','').replace('\\html; charset=ISO-8859-1','');
-        };
-        try{
-          request(uri).pipe(fs.createWriteStream(filename+'.'+type)).on('error', function(e){
-            console.log(e)
-          }).on('close', callback);
-        }catch(e){
-          console.log('儲存圖片發生錯誤'+e);
-        };
-      }).on('error', function(e){
-        console.log(e)
-      }).end();
-  };
-
-  function replace_path(path){
-    return path.replace('/','').replace('.','').replace('\\','').replace(':','').replace('*','')
-    .replace('?','').replace('"','').replace('<','').replace('>','').replace('|','');
-  };
-
-  function saveFile () {
-    dialog.showSaveDialog({ filters: [
-       { name: 'text', extensions: ['txt'] }
-      ]}, function (fileName) {
-      if (fileName === undefined) return;
-      fs.writeFile(fileName, 'ww', function (err) {
-       if (err === undefined) {
-         dialog.showMessageBox({ message: "The file has been saved! :-)",
-          buttons: ["OK"] });
-       } else {
-         dialog.showErrorBox("File Save Error", err.message);
-       }
-      });
-    });
-  };
   init();
   //return can_load;
   return this;
