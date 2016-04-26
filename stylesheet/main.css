@@ -5,11 +5,12 @@ body{
   overflow: hidden;
   background: #eeeeee;
 }
-input[type="text"],input[type="password"],input[type="search"]{
+input[type="password"],input[type="search"],.bottom_line{
   border: none;
   outline:none;
   border-bottom: #cccccc 1px solid;
   padding: 2px 5px; 
+  background: none;
 }
 #header{
   position: fixed;
@@ -63,6 +64,20 @@ input[type="text"],input[type="password"],input[type="search"]{
   background: #ffffff;
   box-shadow: #ccc 0px 0px 1px .5px;
   transition: all .3s;
+}
+.menu-item{
+  margin: 1px;
+  border-bottom: 1px solid #cccccc;
+}
+.menu-title{
+  font-size: 0.8em;
+  color:  #009688;
+  border-bottom: 0px;
+}
+.menu-context{
+  font-size: 0.8em;
+  color:  #757575;
+  border-bottom: 0px;
 }
 .list-item:hover{
   box-shadow: #ccc 0px 0px 2px 1px;
@@ -124,8 +139,13 @@ span.text{
   background: rgb(204, 255, 102);
 }
 .setting_list{
-  padding:20px 10px;
+  padding:20px 30px;
 }
+.label{
+  display: inline-block;
+  width : 120px;
+}
+
 #view4-dir-view-path{
   width:97%;
   border: none;

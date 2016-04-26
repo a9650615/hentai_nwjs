@@ -121,6 +121,12 @@ function Hentai($){
     for(var i in data.data){
        re_down(data.data[i],i);
     }
+
+    //取代TYPE名稱設定
+    for(let i in setting.GallaryTypes){
+       global.Setting.GallaryTypes[i] = setting.GallaryTypes[i];
+    }
+
       //console.log(setting.debug);
     if(setting.debug)
           win.showDevTools();
@@ -161,14 +167,31 @@ function Hentai($){
     //Login Event
     LoginContent.events();
     
+    //Account Setting
+    let GallaryTypesHtml = [];
+    
+    for(let i in global.Setting.GallaryTypes){
+        $('#view-1-typeselect').append('<option value="f_'+i+'">'+global.Setting.GallaryTypes[i]+'</option>');
+        GallaryTypesHtml.push('<div><span class="label">'+i+'</span><input name="'+i+'" class="bottom_line" type="text" value="'+Setting.GallaryTypes[i]+'"></div>');
+    }
+    $('#view-4-GallaryType').html(GallaryTypesHtml.join(''));
+
+    $('#view-4-GallaryTypeSave').on('click', () => {  //儲存TYPE名稱設定
+      let data = {};
+      console.log(setting);
+      $('#view-4-GallaryType input').each( ( i, h) => {
+          if(h.value){
+            setting.GallaryTypes[h.name] = h.value;
+            global.Setting.GallaryTypes[h.name] = h.value;
+          };
+      });
+      save_setting();
+    });
+
     //select
     for(var i=0;i<=9;i++){ //add to favorite
       $('#detail-favoriteid').append('<option>'+i+'</option>');
     };
-
-    for(var i in global.Setting.GallaryTypes){
-        $('#view-1-typeselect').append('<option value="f_'+i+'">'+global.Setting.GallaryTypes[i]+'</option>');
-    }
 
     $('#view-1-refresh').on('click', () => { //更新按鈕
       $('#view-1>:not(.selecter)').remove();
@@ -178,7 +201,7 @@ function Hentai($){
     $('#detail-addfavorite').on('click', () => { // 加到最愛
       let split = data.nowdata.url.split('/');
       global.UserService.AddToFavorite( split[1], split[2], { favcat: $('#detail-favoriteid').val(),favnote:'' }).then( ( type ) => {
-        console.log(type);
+        //console.log(type);
         if(type==1){
           $('#detail-addfavorite-section').hide();
           $('#detail-removefavorite').show();
@@ -189,7 +212,7 @@ function Hentai($){
     $('#detail-removefavorite').on('click', () => { // 移除最愛
       let split = data.nowdata.url.split('/');
       global.UserService.AddToFavorite( split[1], split[2], { favcat: 'favdel',favnote:'' }).then( ( type ) => {
-        console.log(type);
+        //console.log(type);
         if(type==1){
           $('#detail-addfavorite-section').show();
           $('#detail-removefavorite').hide();

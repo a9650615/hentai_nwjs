@@ -107,12 +107,17 @@
         <!--List 4-->
         <div class="view" data-index="4">
             <div>
-                <div></div>
                 <div class="setting_list">
-                    <div>下載路徑</div>
-                    <div class="setting_item">
+                    <p class="menu-item menu-title">下載路徑</p>
+                    <div class="setting_item menu_item">
                         <input readonly id="view4-dir-view-path">
                         <input type="file" style="display:none" nwworkingdir="C:" nwdirectory id="view4-dir-path"><!--readonly-->
+                    </div>
+                     <div>
+                        	<p class="menu-item menu-title">分類顯示設定:</p>
+                        	<p class="menu-item menu-context">根據您的喜好修改分類名稱，更新後生效</p>
+                        	<div id="view-4-GallaryType"></div>
+                        	<div><button id="view-4-GallaryTypeSave" class="btn-beat gb_fa">儲存</button></div>
                     </div>
                 </div>
             </div>
@@ -133,11 +138,16 @@
         <!--List 6-->
         <div class="view" data-index="6">
             <div id="view-6-member-setting" class="setting_list">
-                <div><input type="checkbox" /><label>顯示日文標題</label></div>
+            	   <p class="menu-item menu-title">相簿顯示設定:</p>
+                <div class="menu_item">
+                	<label for="view-6-show-jpn-title">顯示日文標題</label>
+		<input type="checkbox" id="view-6-show-jpn-title" />
+                </div>
+                <p class="menu-item menu-title">登出</p>
                 <div id="logout-button" class="setting_item">登出</div>
-            </div>
+              </div>
             <div id="login-box" class="float-box login-box">
-                <div>帳號:<input  type="text" id="login-username" /></div>
+                <div>帳號:<input  type="text" class="bottom_line" id="login-username" /></div>
                 <div>密碼:<input  type="password" id="login-password" /></div>
                 <div>
                     <button class="btn-beat" id="login-button">登入</button>
