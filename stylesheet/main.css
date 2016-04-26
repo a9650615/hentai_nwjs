@@ -43,6 +43,11 @@ input[type="text"],input[type="password"],input[type="search"]{
   overflow: auto;
   position: absolute;
 }
+.selecter{
+  display: block;
+  margin-top:10px;
+  margin-left: 2.5%;
+}
 .list{
 
 }

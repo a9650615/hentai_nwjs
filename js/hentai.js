@@ -162,10 +162,18 @@ function Hentai($){
     LoginContent.events();
     
     //select
-    
-    for(var i=0;i<=9;i++){
+    for(var i=0;i<=9;i++){ //add to favorite
       $('#detail-favoriteid').append('<option>'+i+'</option>');
     };
+
+    for(var i in global.Setting.GallaryTypes){
+        $('#view-1-typeselect').append('<option value="f_'+i+'">'+global.Setting.GallaryTypes[i]+'</option>');
+    }
+
+    $('#view-1-refresh').on('click', () => { //更新按鈕
+      $('#view-1>:not(.selecter)').remove();
+      load_list();
+    });
 
     $('#detail-addfavorite').on('click', () => { // 加到最愛
       let split = data.nowdata.url.split('/');
@@ -386,7 +394,7 @@ function Hentai($){
     
     t.data_loader.parseData('detail',
       {
-        _url_ : [url[3],url[4],url[5]].join('/')+'/'
+        _url_ : [url[3],url[4],url[5]].join('/')+'/?hc=1'
       },
       function ( data){
         view2( data, id);
@@ -395,6 +403,7 @@ function Hentai($){
   };
 
   function view2( dat, id){
+    console.log(dat);
     data.nowdata = dat;
     data.nowdata.id = id;
     save_data();//New
@@ -470,8 +479,23 @@ function Hentai($){
       can_load['list'] = true;
     },function(){log('list-load-fail')});
     */
+    /* 類型判斷 */
+    let condition = {
+      page : page,
+      'f_apply':'Apply+Filter'
+    };
+    if($('#view-1-typeselect').val() != 0)
+    $('#view-1-typeselect option').each( (i,w) => {
+      if( i!=0) // delete all
+      if(w.selected){
+        condition[w.value] = 1;
+      }else{
+        condition[w.value] = 0;
+      };
+    });
+  
     t.data_loader.parseData( 'list', 
-      {page : page},
+      condition,
       function(data){
         add_view1_list(data,'#view-1');
         can_load['list'] = true;
@@ -489,9 +513,9 @@ function Hentai($){
         html.attr('title',data[i].name).attr('data-url',data[i].href);
         html.children('.board-right').children('.list-name').children('span.text').text(data[i].name);
         html.children('.board-right').children('.list-rank').children('span.text').text(data[i].rank);
-        html.children('.board-right').children('.list-type').children('span.text').text(data[i].type);
+        html.children('.board-right').children('.list-type').children('span.text').text(global.Setting.GallaryTypes[data[i].type]);
         $(html).show().bind('click',function(){
-          $('.main-menu[data-index=2]').attr('enable','false')
+          $('.main-menu[data-index=2]').attr('enable','false');
           load_detail($(this).attr('data-url'));
         });
         $(view).append(html);
@@ -504,11 +528,11 @@ function Hentai($){
     };
   };
 
-  var log = function(d){
+var log = function(d){
     if(setting.debug)
     console.log(d);
   };
-
+  //console.log(UserService.uConfig(UserService.SiteData('uconfig'), 'tl','j'));
   init();
   //return can_load;
   return this;

@@ -55,3 +55,43 @@ exports.CheckFavorite  = ( id, token)  => {
 	});
 	return promise;
 };
+
+exports.SiteData = ( name, data) => {
+	if(localStorage.getItem('UserCookie')){
+		var string = localStorage.getItem('UserCookie').split(';');
+		for(var i in string){
+			if(string[i].indexOf(name) != -1){
+				if(data){
+					string[i] = string[i].substr(0,string[i].lastIndexOf('=')+1) + data;
+				}else{
+					return string[i].substr(string[i].lastIndexOf('=')+1);
+				}
+			}
+		}
+		if(data) localStorage.setItem('UserCookie', string.join(';'));
+	}
+	return false;
+}
+
+exports.uConfig = ( string, name, data) => {
+	var chg = 0;
+	if(data) chg = 1;
+	if(string){
+		string = string.split('-');
+		console.log(string);
+		for(var i in string){
+			if(string[i].indexOf(name) != -1){
+				if(data){
+					string[i] = string[i].substr(0,string[i].lastIndexOf('_')+1) + data;
+					chg = 0;
+				}else{
+					return string[i].substr(string[i].lastIndexOf('_')+1);
+				}
+			}
+		}
+		i++;
+		if(chg==1)
+			string[i] = name +'_'+ data;
+		if(data) exports.SiteData('uconfig',string.join('-'));
+	}
+}
