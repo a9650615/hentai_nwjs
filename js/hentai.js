@@ -14,8 +14,10 @@ var dialog = remote.require('dialog');
 const shell = require('electron').shell;
 
 global.Setting = require('./js/setting.js');
-global.Setting.UserCookie = localStorage.getItem('UserCookie')?localStorage.getItem('UserCookie'):global.Setting.UserCookie;
-
+function update_usercookie(){
+  global.Setting.UserCookie = localStorage.getItem('UserCookie')?localStorage.getItem('UserCookie'):global.Setting.UserCookies;
+}
+global.update_usercookie = update_usercookie;
 //custom library
 var LoginContent = require('./js/view/login/login.js');
 
@@ -70,7 +72,7 @@ function Hentai($){
     id : 0,
     download_id:0
   };
-  
+  update_usercookie();//取得會員資料
   global.Data.data = data;
   this.Menu        = require( PATH.js + 'menu');
   this.data_loader = require( PATH.js + 'data_loader');
@@ -126,7 +128,9 @@ function Hentai($){
     for(let i in setting.GallaryTypes){
        global.Setting.GallaryTypes[i] = setting.GallaryTypes[i];
     }
-
+    if(UserService.uConfig(UserService.SiteData('uconfig'), 'tl')=='j'){
+      $('#view-6-show-jpn-title').attr("checked",true);
+    }
       //console.log(setting.debug);
     if(setting.debug)
           win.showDevTools();
@@ -167,6 +171,13 @@ function Hentai($){
     //Login Event
     LoginContent.events();
     
+    $('#view-6-show-jpn-title').on('change', () => {
+      if($('#view-6-show-jpn-title').is(':checked'))
+        UserService.uConfig(UserService.SiteData('uconfig'), 'tl','j');
+      else
+        UserService.uConfig(UserService.SiteData('uconfig'), 'tl','r');
+      update_usercookie();
+    });
     //Account Setting
     let GallaryTypesHtml = [];
     

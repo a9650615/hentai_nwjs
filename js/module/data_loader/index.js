@@ -21,7 +21,13 @@ var options = {
     }
 };
 
+exports.change_cookie = () => {
+	data.cookie = global.Setting.UserCookie;
+	options.headers.Cookie = data.cookie;
+}
+
 exports.load_url = function ( url, returnfuc){
+	exports.change_cookie();
 	var html = '';
 	options.path = (url?'/'+url:null) || '/';
 	//console.log(options.path);

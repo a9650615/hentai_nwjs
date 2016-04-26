@@ -68,7 +68,7 @@ exports.SiteData = ( name, data) => {
 				}
 			}
 		}
-		if(data) localStorage.setItem('UserCookie', string.join(';'));
+		if(data){ localStorage.setItem('UserCookie', string.join(';')); global.update_usercookie(); }
 	}
 	return false;
 }
@@ -92,6 +92,6 @@ exports.uConfig = ( string, name, data) => {
 		i++;
 		if(chg==1)
 			string[i] = name +'_'+ data;
-		if(data) exports.SiteData('uconfig',string.join('-'));
+		if(data) return  exports.SiteData('uconfig',string.join('-'));
 	}
 }

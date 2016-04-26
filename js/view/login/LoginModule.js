@@ -56,6 +56,7 @@ exports.Login = ( username, password) => {
 							}
 							data.cookie = cookie;
 							localStorage.setItem('UserCookie', cookie);
+							global.update_usercookie();
 						});
 						resolve( 1, httpResponse) ;
 					};
