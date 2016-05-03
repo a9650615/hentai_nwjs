@@ -9,8 +9,8 @@ var nwDir = path.dirname(nwPath);
 window.$ = window.jQuery = require('./js/extend/jquery-1.11.3.js');
 global.$ = window.$;
 global.UserService = require('./js/module/UserService');
-var remote = require('remote'); 
-var dialog = remote.require('dialog'); 
+var remote = require('remote');
+var dialog = remote.require('dialog');
 const shell = require('electron').shell;
 
 global.Setting = require('./js/setting.js');
@@ -91,7 +91,7 @@ function Hentai($){
         var options = {
             icon: ".\\stylesheet\\icon.png",
             body: data
-        };  
+        };
       var notification = new Notification("提示",options);
         notification.onclick = function () {
             notification.close();
@@ -162,15 +162,15 @@ function Hentai($){
     fs.writeFile(nwDir+'/setting.json',JSON.stringify(setting));
   };
 
-  function save_data(){
-    fs.writeFile(nwDir+'/data.json',JSON.stringify(data));
+  function save_data(func){
+    fs.writeFile(nwDir+'/data.json',JSON.stringify(data),func);
   };
 
 
   function events(){
     //Login Event
     LoginContent.events();
-    
+
     $('#view-6-show-jpn-title').on('change', () => {
       if($('#view-6-show-jpn-title').is(':checked'))
         UserService.uConfig(UserService.SiteData('uconfig'), 'tl','j');
@@ -180,7 +180,7 @@ function Hentai($){
     });
     //Account Setting
     let GallaryTypesHtml = [];
-    
+
     for(let i in global.Setting.GallaryTypes){
         $('#view-1-typeselect').append('<option value="f_'+i+'">'+global.Setting.GallaryTypes[i]+'</option>');
         GallaryTypesHtml.push('<div><span class="label">'+i+'</span><input name="'+i+'" class="bottom_line" type="text" value="'+Setting.GallaryTypes[i]+'"></div>');
@@ -262,7 +262,7 @@ function Hentai($){
       add_view3( null, null, true);
       change_page(3);
     });
-    
+
     $('#detail-view').bind('click',function(){ //閱讀
       t.viewer.openView(data.nowdata);
     });
@@ -270,7 +270,7 @@ function Hentai($){
     $('#search-bar').bind('keyup',function(e){
       if(e.keyCode==13){
         var url = $('#search-bar').val().trim().match(search.g) ;
-        if( url ){ 
+        if( url ){
           load_detail( url[0] );
         }else{
           //$('#view-5 .list-item:not([id="view-5-view"])').remove();
@@ -285,8 +285,8 @@ function Hentai($){
       };
     });
     $('#view4-dir-view-path').click(function(){
-        $('#view4-dir-path').click();    
-    });  
+        $('#view4-dir-path').click();
+    });
 
     $('#view4-dir-path').on('click',function(){
         //console.log(dialog.showOpenDialog({ properties: [ 'openFile', 'openDirectory']}));
@@ -363,7 +363,6 @@ function Hentai($){
           };
         };
       };
-
       //dat = data.nowdata;
       var html = $($('#view-3-view')[0].outerHTML);
       html.attr('title',dat.name).attr('data-url',dat.href);
@@ -392,7 +391,10 @@ function Hentai($){
       if(!d){
         html.attr('id','download-'+data.now);
         data.data[data.now] = data.nowdata;
-        t.downloader.download_file( data.now, function(cc){log(cc);});
+        //臨時解決方案
+        save_data(function(){
+          t.downloader.download_file( data.now, function(cc){log(cc);});
+        });
         bt_p_s.attr('data-id',data.now);
       }else{
         html.attr('id','download-'+id);
@@ -425,7 +427,7 @@ function Hentai($){
     ajax(url,function (data){
       view2( data, id);
     });*/
-    
+
     t.data_loader.parseData('detail',
       {
         _url_ : [url[3],url[4],url[5]].join('/')+'/?hc=1'
@@ -433,7 +435,7 @@ function Hentai($){
       function ( data){
         view2( data, id);
       });
-    
+
   };
 
   function view2( dat, id){
@@ -450,7 +452,7 @@ function Hentai($){
     });
     $('#detail-time').text(dat.information.posted);
     $('#detail-language').text(dat.information.language);
-    
+
     //最愛
     $('#detail-addfavorite-section').hide();
     $('#detail-removefavorite').hide();
@@ -470,7 +472,7 @@ function Hentai($){
     }else{
       $('#detail-source-download').hide();
     };
-    
+
     //評論
     $('#detail-comments').html($('#detail-comment-view')[0].outerHTML);
     for(var i in dat.comment){
@@ -496,7 +498,7 @@ function Hentai($){
       can_load['search'] = true;
     },function(){log('list-load-fail')});
     */
-    t.data_loader.parseData( 'list', 
+    t.data_loader.parseData( 'list',
       {page:page, f_search: encodeURI($('#search-bar').val().trim().replace(' ','+')), f_doujinshi:'on', f_manga:'on', f_artistcg:'on', f_gamecg:'on', f_western:'on', 'f_non-h':'on', f_imageset:'on', f_cosplay:'on', f_asianporn:'on', f_misc:'on', f_apply:'Apply+Filter'},
       function(data){
         add_view1_list(data,'#view-5');
@@ -527,8 +529,8 @@ function Hentai($){
         condition[w.value] = 0;
       };
     });
-  
-    t.data_loader.parseData( 'list', 
+
+    t.data_loader.parseData( 'list',
       condition,
       function(data){
         add_view1_list(data,'#view-1');
