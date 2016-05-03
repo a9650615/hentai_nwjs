@@ -1,9 +1,9 @@
 {
   "name": "hentai",
-  "version": "0.0.9",
+  "version": "0.1.2",
   "main": "main.js",
   "scripts": {
-    "build": "electron-packager . hentai --ignore=node_modules/electron-* --platform=win32 --arch=x64 --version=0.37.3"
+    "build": "electron-packager . hentai --ignore=node_modules/electron-* --platform=linux --arch=ia32 --version=0.37.3 --icon=./app.ico"
   },
   "window": {
     "icon": "/stylesheet/icon.png",
@@ -11,7 +11,7 @@
   },
   "devDependencies": {
     "electron-connect": "^0.3.7",
-    "electron-packager": "^6.0.0",
+    "electron-packager": "~7.0.1",
     "gulp": "^3.9.1"
   }
 }
