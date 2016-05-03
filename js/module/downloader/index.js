@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 var exports = module.exports = {};
 
 var mkdirp = require('mkdirp');
@@ -148,7 +147,7 @@ exports.replace_path = function (path){
             console.log('儲存圖片發生錯誤'+e);
       })*/
   };
-=======
+
 var exports = module.exports = {};
 
 var mkdirp = require('mkdirp');
@@ -297,4 +296,3 @@ exports.replace_path = function (path){
             console.log('儲存圖片發生錯誤'+e);
       })*/
   };
->>>>>>> parent of fdb1b0c... 更新
