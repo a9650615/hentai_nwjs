@@ -7,7 +7,8 @@
 
 環境準備
 ----
-方法一.npm 安裝法
+方法一.npm 安裝法 (Nodejs )
+**npm install gulp -g**
 
 **npm install**
 

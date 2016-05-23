@@ -1,3 +1,83 @@
+@font-face {
+  font-family: SystemFont;
+  src: url("fonts/冬青黑体W3.otf") format("opentype");
+}
+
+body{
+  font-family: SystemFont;
+  font-size: 18px;
+  margin: 0px;
+  overflow: hidden;
+  background: #eeeeee;
+  position: relative;
+}
+
+.view{
+  margin-top:0px;
+  height: -webkit-calc(100% - (63px));
+  width: 100%;
+  display: block;
+  overflow: auto;
+  position: absolute;
+}
+
+/*修正disable*/
+nav li[enable=true]:hover {
+    background-color: rgba(0,0,0,0.1);
+    cursor: pointer;
+}
+
+.card-image {
+  float: left;
+  width: 22%;
+  height: 200px;
+  position: relative;
+}
+.card .card-image{
+  text-align : center;
+}
+.card .card-image img {
+  max-width: 100%;
+  max-height: 100%;
+  width:  auto;
+  vertical-align : middle;
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  margin: auto;
+}
+.right-content {
+  position: relative;
+  width: 78%;
+  padding: 0% 2%;
+  float: left;
+}
+.card-title {
+  font-size: 1.5rem !important;
+  width : 100%;
+  overflow:hidden;
+  display:inline-block;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.card .card-action{
+  padding: 10px 20px 10px 20px;
+}
+
+.comment-user,.comment-user>span{
+ color: #27ae60;
+ padding:2px;
+}
+.comment-msg{
+  padding: 1px 5px;
+}
+.comment-log{
+  text-align: right;
+  font-size: 0.6em;
+}
+
 .btn-beat{
   background-image: -webkit-gradient(linear,left top,left bottom,from(#f5f5f5),to(#f1f1f1));
   background-image: -webkit-linear-gradient(top,#f5f5f5,#f1f1f1);

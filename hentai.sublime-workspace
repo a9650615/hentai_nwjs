@@ -148,14 +148,6 @@
 	"buffers":
 	[
 		{
-			"file": "js/hentai.js",
-			"settings":
-			{
-				"buffer_size": 20722,
-				"line_ending": "Unix"
-			}
-		},
-		{
 			"file": "package.json",
 			"settings":
 			{
@@ -164,39 +156,19 @@
 			}
 		},
 		{
-			"file": "js/module/data_loader/index.js",
+			"file": "stylesheet/main.css",
 			"settings":
 			{
-				"buffer_size": 7455,
+				"buffer_size": 5216,
 				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "node_modules/electron-prebuilt/dist/data.json",
-			"settings":
-			{
-				"buffer_size": 1846,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"contents": "var exports = module.exports = {};\n\nvar mkdirp = require('mkdirp');\nvar request = require('request');\nvar path = require('path');\nvar fs = require('fs');\nvar nwPath = process.execPath;\nvar nwDir = path.dirname(nwPath);\nvar data_loader = require( '../data_loader');\n//console.log(global);\nvar data;\nvar setting;\n\nfunction save_data(){//臨時\n    fs.writeFile(nwDir+'/data.json',JSON.stringify(data));\n};\nfunction alert(data){\n      if(typeof data == 'object')\n      var options = {\n            icon: \".\\\\stylesheet\\\\icon.png\",\n            body: data.message\n        };\n      else\n        var options = {\n            icon: \".\\\\stylesheet\\\\icon.png\",\n            body: data\n        };\n      var notification = new Notification(\"提示\",options);\n        notification.onclick = function () {\n            notification.close();\n        }\n\n        notification.onshow = function () {\n        };\n  };\n\nexports.create_path = function (path){\n    //var stats = fs.lstatSync(path);\n    //if (!stats.isDirectory()) {\n    //  fs.mkdir( path, 0777,function(e){console.log(e)});\n    //};\n    mkdirp(path, function(err) {\n     //path was created unless there was error\n     console.log('創建資料夾失敗:'+err);\n    });\n  };\n\nexports.replace_path = function (path){\n    return path.replace('/','').replace('.','').replace('\\\\','').replace(':','').replace('*','')\n    .replace('?','').replace('\"','').replace('<','').replace('>','').replace('|','');\n  };\n\n  exports.download_file = function ( id, func){\n      try{\n        data = require(nwDir+'/data.json');\n        setting = require(nwDir+'/setting.json');\n      }catch(e){\n\n      }\n\n      if(!data.data[id].pause){\n        if(data.data[id].name)\n        exports.create_path(setting.path+exports.replace_path(data.data[id].name)+'/');\n        save_data();\n        /*\n        ajax(data.data[id].start,function(da){\n          //console.log(da);\n          //ajax(da.image,function(dt){\n          //  fs.writeFile( setting.path+data.data[id].name+'\\\\'+data.data[id].nowdownload+'.jpg',dt,func);\n        });*/\n        data_loader.parseData('image',\n          {\n            _url_ : data.data[id].start.replace( global.Data.data.base,'')\n          },\n          function( da, e){\n            if(e) console.log('阿斯'+e);\n            if(data.data[id].nowdownload==null)\n              data.data[id].nowdownload = 1;\n            else\n              data.data[id].nowdownload++;\n            data.data[id].start = da.next;\n            data.data[id].max = da.total*1;\n            $('#download-'+id).children('.board-right').children('.list-state').text(data.data[id].nowdownload+'/'+da.total);\n            $('#download-'+id).children('.board-right').children('.download-bar').children('.progress').css('width',(data.data[id].nowdownload/da.total)*100+'%');\n            console.log(da.fullimage);\n            exports.save_file(\n              id,\n              data.data[id].source?(da.fullimage?da.fullimage:da.image):da.image,//da.fullimage,\n              setting.path+exports.replace_path(data.data[id].name)+'/'+data.data[id].nowdownload,\n              function(d){\n                console.log(d);\n                save_data();\n                if(data.data[id])\n                if(data.data[id].max>data.data[id].nowdownload)\n                exports.download_file(id);\n                else{\n                  $('#download-'+id+' .button-p-s').remove();\n                  alert({title:'下載完成!',message:data.data[id].name+'下載完成，共 '+data.data[id].max+' 頁'});\n                };\n              });\n          });\n      };\n          //});//下載檔案\n    };\n\n  exports.save_file = function( id, uri, filename, callback){\n    var type;\n    console.log(uri);\n    request({\n      method: 'GET',\n      uri: uri,\n      maxRedirects: 300,\n      headers: {\n        'User-Agent': 'Mozilla/5.0 (X11; Linux i686) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.64 Safari/537.11',\n        'Cookie': global.Setting.UserCookie,\n        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',\n        'Connection': 'keep-alive',\n        encoding: 'binary'\n      }\n    },function(err, res, body){\n        if(err)\n        if(err.statusMessage!='OK'){\n          console.log('以下err');\n          console.log(err);\n          data.data[id].nowdownload--;\n          exports.download_file(id);\n        }\n      }).on('response',function (res) {\n          //Here you can modify the headers\n         type = 'jpg';\n         if(res){\n         //log('content-type:', res.headers['content-type']);\n         //log('content-length:', res.headers['content-length']);\n          type=res.headers['content-type'].replace('image/','').replace('\\\\html; charset=ISO-8859-1','');\n         };\n         console.log(type);\n         fs.rename(filename+'.undownload', filename+'.'+type, function(err) {\n             if ( err ) console.log('ERROR: ' + err);\n         });\n      }).pipe(fs.createWriteStream(filename+'.undownload').on('error', function(e){\n            console.log(e);\n            console.log('儲存圖片發生錯誤'+e);\n      })).on('close', callback);\n    /*.pipe(fs.createWriteStream(filename+'.'+type)).on('error', function(e){\n            console.log(e);\n            console.log('儲存圖片發生錯誤'+e);\n      })*/\n  };\n",
-			"file": "js/module/downloader/index.js",
-			"file_size": 5428,
-			"file_write_time": 131047358461975553,
-			"settings":
-			{
-				"buffer_size": 5188,
-				"line_ending": "Windows",
-				"scratch": true
 			}
 		},
 		{
 			"file": "index.html",
 			"settings":
 			{
-				"buffer_size": 5765,
-				"line_ending": "Windows"
+				"buffer_size": 8007,
+				"line_ending": "Unix"
 			}
 		}
 	],
@@ -245,14 +217,28 @@
 	},
 	"expanded_folders":
 	[
-		"/D/works/works/hentai_nwjs",
-		"/D/works/works/hentai_nwjs/js",
-		"/D/works/works/hentai_nwjs/js/module",
-		"/D/works/works/hentai_nwjs/js/module/data_loader",
-		"/D/works/works/hentai_nwjs/js/module/UserService"
+		"/media/things/works/works/hentai_nwjs",
+		"/media/things/works/works/hentai_nwjs/js",
+		"/media/things/works/works/hentai_nwjs/js/module",
+		"/media/things/works/works/hentai_nwjs/js/module/downloader",
+		"/media/things/works/works/hentai_nwjs/stylesheet"
 	],
 	"file_history":
 	[
+		"/media/things/linux軟體/utorrent-server/settings.dat",
+		"/home/birdyo/Desktop/sublime_text.desktop",
+		"/media/things/server/gogs/custom/conf/app.ini",
+		"/media/things/works/works/hentai_nwjs/README.md",
+		"/home/birdyo/.config/upstart/gogs",
+		"/media/things/www/conf/nginx.conf",
+		"/etc/rc.local",
+		"/mnt/nas/gogs/custom/conf/app.ini",
+		"/etc/pure-ftpd/conf/NoAnonymous",
+		"/etc/pure-ftpd/pureftpd-dir-aliases",
+		"/media/things/works/works/hentai_nwjs/js/module/downloader/index.js",
+		"/media/things/works/works/hentai_nwjs/node_modules/electron-prebuilt/dist/data.json",
+		"/media/things/works/works/hentai_nwjs/js/module/data_loader/index.js",
+		"/media/things/works/works/hentai_nwjs/js/hentai.js",
 		"/D/軟體/vpn切換器/lists.json",
 		"/F/資源/E9 ROM/ADB-Windows/Unlock_code.bin",
 		"/D/works/php/package.json",
@@ -299,7 +285,7 @@
 	],
 	"find":
 	{
-		"height": 37.0
+		"height": 58.0
 	},
 	"find_in_files":
 	{
@@ -313,6 +299,8 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"selection",
+			"list-clover-image",
 			"view3",
 			"');\n",
 			"mkdirp",
@@ -340,6 +328,7 @@
 		"regex": false,
 		"replace_history":
 		[
+			"list-cover-image"
 		],
 		"reverse": false,
 		"show_context": true,
@@ -350,42 +339,11 @@
 	"groups":
 	[
 		{
-			"selected": 0,
+			"selected": 2,
 			"sheets":
 			[
 				{
 					"buffer": 0,
-					"file": "js/hentai.js",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 20722,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								1431,
-								1431
-							]
-						],
-						"settings":
-						{
-							"origin_encoding": "UTF-8",
-							"syntax": "Packages/JavaScriptNext - ES6 Syntax/JavaScriptNext.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 470.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 0,
-					"type": "text"
-				},
-				{
-					"buffer": 1,
 					"file": "package.json",
 					"semi_transient": false,
 					"settings":
@@ -397,8 +355,8 @@
 						"selection":
 						[
 							[
-								0,
-								0
+								41,
+								41
 							]
 						],
 						"settings":
@@ -412,117 +370,54 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "stylesheet/main.css",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 5216,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								5216,
+								5216
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/CSS/CSS.sublime-syntax",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 7401.0,
+						"zoom_level": 1.0
+					},
 					"stack_index": 1,
 					"type": "text"
 				},
 				{
 					"buffer": 2,
-					"file": "js/module/data_loader/index.js",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 7455,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								1339,
-								1339
-							]
-						],
-						"settings":
-						{
-							"origin_encoding": "UTF-8",
-							"syntax": "Packages/JavaScriptNext - ES6 Syntax/JavaScriptNext.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 720.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 4,
-					"type": "text"
-				},
-				{
-					"buffer": 3,
-					"file": "node_modules/electron-prebuilt/dist/data.json",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 1846,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								0,
-								0
-							]
-						],
-						"settings":
-						{
-							"origin_encoding": "UTF-8",
-							"syntax": "Packages/JavaScriptNext - ES6 Syntax/JSON (JavaScriptNext).tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 5,
-					"type": "text"
-				},
-				{
-					"buffer": 4,
-					"file": "js/module/downloader/index.js",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 5188,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								4485,
-								4485
-							]
-						],
-						"settings":
-						{
-							"force_encoding": "GBK",
-							"in_converting": true,
-							"origin_encoding": "UTF-8",
-							"revert_to_scratch": false,
-							"syntax": "Packages/JavaScriptNext - ES6 Syntax/JavaScriptNext.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 2160.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 2,
-					"type": "text"
-				},
-				{
-					"buffer": 5,
 					"file": "index.html",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 5765,
+						"buffer_size": 8007,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2203,
-								2225
+								837,
+								837
 							]
 						],
 						"settings":
@@ -533,10 +428,10 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 720.0,
+						"translation.y": 105.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 3,
+					"stack_index": 0,
 					"type": "text"
 				}
 			]
@@ -544,7 +439,7 @@
 	],
 	"incremental_find":
 	{
-		"height": 28.0
+		"height": 33.0
 	},
 	"input":
 	{
@@ -581,7 +476,7 @@
 	"project": "hentai.sublime-project",
 	"replace":
 	{
-		"height": 52.0
+		"height": 98.0
 	},
 	"save_all_on_build": true,
 	"select_file":

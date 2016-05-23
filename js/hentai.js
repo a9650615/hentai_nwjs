@@ -144,7 +144,7 @@ function Hentai($){
     $('#view4-dir-view-path').val(setting.path);
   }
   function window_resize(){
-    if($(window).width()<800){
+    /*if($(window).width()<800){
       $('.view').height($(window).height() - 50);
       $('.view').width('').css('left','');
       $('#header').width('');
@@ -155,7 +155,7 @@ function Hentai($){
         $('#header').width(300);
         $('.view').width($(window).width()-300).css('left','300px');
       };
-    };
+    };*/
   };
 
   function save_setting(){
@@ -170,7 +170,6 @@ function Hentai($){
   function events(){
     //Login Event
     LoginContent.events();
-
     $('#view-6-show-jpn-title').on('change', () => {
       if($('#view-6-show-jpn-title').is(':checked'))
         UserService.uConfig(UserService.SiteData('uconfig'), 'tl','j');
@@ -320,13 +319,15 @@ function Hentai($){
     $(window).resize(function(){
       window_resize();
     });
+
+    $('select').material_select();//更新選擇
   };
 
   function change_page(page){
     if($('#header .main-menu li[data-index="'+page+'"]').attr('enable')!='false'){
       data.page = page;
       $('#header .main-menu li').removeClass();
-      $('#header .main-menu li[data-index="'+data.page+'"]').addClass('selected');
+      $('#header .main-menu li[data-index="'+data.page+'"]').addClass('active');
       $('.view').hide();
       $('.view[data-index="'+data.page+'"]').show();
     }
@@ -367,7 +368,7 @@ function Hentai($){
       var html = $($('#view-3-view')[0].outerHTML);
       html.attr('title',dat.name).attr('data-url',dat.href);
       t.data_loader.parseImage( dat.img, html,function( url, obj){
-         obj.children('.board-left').children('.list-clover-image').css('background-image','url('+url+')');
+         obj.children('.board-left').children('.list-clover-image').attr('src',url);
       });
       html.children('.board-right').children('.list-name').text(dat.name);
       $(html).show().bind('dblclick',function(){
@@ -405,7 +406,7 @@ function Hentai($){
         bt_p_s.remove();
       };
 
-      $("#view-3").prepend(html);
+      $("#view-3 .container").prepend(html);
     }
   }
   function p_s_download( id){
@@ -447,8 +448,8 @@ function Hentai($){
     change_page(2);
     $('#detail-name').text(dat.name);
     t.data_loader.parseImage( dat.img, null, function( url){
-      $('#detail-background').css('background-image','url('+url+')');
-      $('#detail-image').css('background-image','url('+url+')');
+      $('#detail-background').css('background-image','url('+url+')').css('background-position','50%');
+      $('#detail-image').attr('src',url);
     });
     $('#detail-time').text(dat.information.posted);
     $('#detail-language').text(dat.information.language);
@@ -546,19 +547,20 @@ function Hentai($){
     for(var i in data){
       if(isNumeric(i)){
         var html = $($(view+'-view')[0].outerHTML)/*.attr('id','view-1-id-'+data[i].href.replace('http://','').split('/')[2])*/;
-        html.attr('title',data[i].name).attr('data-url',data[i].href);
-        html.children('.board-right').children('.list-name').children('span.text').text(data[i].name);
-        html.children('.board-right').children('.list-rank').children('span.text').text(data[i].rank);
-        html.children('.board-right').children('.list-type').children('span.text').text(global.Setting.GallaryTypes[data[i].type]);
-        $(html).show().bind('click',function(){
+        //html.attr('title',data[i].name).attr('data-url',data[i].href);
+        html.children('.board-right').children('.card-content').children('.list-name').children('span.text').text(data[i].name);
+        html.children('.board-right').children('.card-content').children('.list-rank').children('span.text').text(data[i].rank);
+        html.children('.board-right').children('.card-content').children('.list-type').children('span.text').text(global.Setting.GallaryTypes[data[i].type]);
+        $(html).show().children('.card-action').children('.action-detail')
+        html.find('.card-action .action-detail').attr('title',data[i].name).attr('data-url',data[i].href).bind('click',function(){
           $('.main-menu[data-index=2]').attr('enable','false');
           load_detail($(this).attr('data-url'));
         });
-        $(view).append(html);
+        $(view+'-container').append(html);
         //data[i].href.replace('http://','').split('/')[2]
         t.data_loader.parseImage(data[i].img, html,function( url, obj){
           /*$('#view-1-id-'+id)*/
-          obj.children('.board-left').children('.list-clover-image').css('background-image','url('+url+')');
+          obj.children('.board-left').children('.list-clover-image').attr('src',url);
         });
       };
     };
