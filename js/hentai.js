@@ -294,11 +294,13 @@ function Hentai($){
     $('#detail-download').bind('click',function(){//下載
       add_view3();
       change_page(3);
+      MenuContent.ChangeMainMenu();
     });
 
     $('#detail-source-download').bind('click',function(){//下載
       add_view3( null, null, true);
       change_page(3);
+      MenuContent.ChangeMainMenu();
     });
 
     $('#detail-view').bind('click',function(){ //閱讀
@@ -463,7 +465,7 @@ function Hentai($){
       });
       bt_del.attr('data-id',id||data.now).bind('click',function(){
         delete data.data[$(this).attr('data-id')];
-        $(this).parents('.list-item').remove();
+        $(this).parents('.card').remove();
         save_data();
       });
       if(!d){
