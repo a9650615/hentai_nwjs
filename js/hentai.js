@@ -18,8 +18,10 @@ function update_usercookie(){
   global.Setting.UserCookie = localStorage.getItem('UserCookie')?localStorage.getItem('UserCookie'):global.Setting.UserCookies;
 }
 global.update_usercookie = update_usercookie;
-//custom library
+
+//view library
 var LoginContent = require('./js/view/login/login.js');
+var MenuContent = require('./js/view/menu/menu.js');
 
 /*錯誤處理*/
 process.on('uncaughtException', function (er) {
@@ -55,9 +57,11 @@ function Hentai($){
     debug : false,
   };
   global.setting = setting;
+  var last_view_page = null; //最後一個瀏覽頁面
   var list_page = 0;
   var search_page = 0;
   var search_to_end = false;
+  var first_search = true;
   var can_load = {
     'search' : true,
     'list'   : true
@@ -70,7 +74,8 @@ function Hentai($){
     now : 0,
     data:[],
     id : 0,
-    download_id:0
+    download_id:0,
+    search_data:[]
   };
   update_usercookie();//取得會員資料
   global.Data.data = data;
@@ -119,11 +124,12 @@ function Hentai($){
       alert({title:'歡迎使用!',message:'第一次使用建議至設定調整下載路徑'});
       save_setting();
     };
-
     for(var i in data.data){
        re_down(data.data[i],i);
     }
-
+    for(var i in data.search_data){
+       add_QuickSearch(data.search_data[i], i);
+    }
     //取代TYPE名稱設定
     for(let i in setting.GallaryTypes){
        global.Setting.GallaryTypes[i] = setting.GallaryTypes[i];
@@ -170,6 +176,39 @@ function Hentai($){
   function events(){
     //Login Event
     LoginContent.events();
+    //添加到快速搜尋
+    $('#add-to-fast-search').bind('click', () => {
+      if($('#search-bar').val()!=''){
+        if(!data.search_data)data.search_data = [];
+        data.search_data.push($('#search-bar').val());
+        save_data();
+        add_QuickSearch($('#search-bar').val(), data.search_data.length,true);
+        Materialize.toast('添加成功', 5000);
+      }
+    });
+    //返回目錄
+    $('#back-to-menu').bind('click', () => {
+      MenuContent.BackToMainMenu();
+      change_last_page();
+    });
+    //call searchbar
+    $('#view-1-callsearch').bind('click', () => {
+        MenuContent.ChangeSearch();
+        if(first_search)
+        change_page(7);
+        else change_page(5);
+    });
+    //searchbar clear
+    $('#search-bar-clear').bind('click', () => {
+      MenuContent.ClearSearchBar();
+      change_page(7,true);//建議搜尋
+    });
+    //call menu
+    $('#view-1-callmenu').bind('click', () => {
+      MenuContent.ChangeMainMenu();
+      change_page(1);
+    });
+
     $('#view-6-show-jpn-title').on('change', () => {
       if($('#view-6-show-jpn-title').is(':checked'))
         UserService.uConfig(UserService.SiteData('uconfig'), 'tl','j');
@@ -204,7 +243,7 @@ function Hentai($){
     };
 
     $('#view-1-refresh').on('click', () => { //更新按鈕
-      $('#view-1>:not(.selecter)').remove();
+      $('#view-1 .container>:not(.selecter)').remove();
       load_list();
     });
 
@@ -267,22 +306,20 @@ function Hentai($){
     });
 
     $('#search-bar').bind('keyup',function(e){
+      if($(this).val()=='')
+        change_page(7,true);//建議搜尋
       if(e.keyCode==13){
         var url = $('#search-bar').val().trim().match(search.g) ;
         if( url ){
           load_detail( url[0] );
         }else{
           //$('#view-5 .list-item:not([id="view-5-view"])').remove();
-          $('#view-5').html('');
-          $('.main-menu li[data-index=5]').attr('enable','true');
-          change_page(5);
-          search_page = 1;
-          search_to_end = false;
-          load_search(search_page-1);
+          call_search();
           //load_detail($(this).attr('data-url'));
         };
       };
     });
+
     $('#view4-dir-view-path').click(function(){
         $('#view4-dir-path').click();
     });
@@ -321,17 +358,57 @@ function Hentai($){
     });
 
     $('select').material_select();//更新選擇
+    $(document).ready(function(){
+      Materialize.updateTextFields();
+    });
   };
 
-  function change_page(page){
+  function change_last_page(){
+    change_page(last_view_page,true);
+  }
+
+  function change_page(page, history){
     if($('#header .main-menu li[data-index="'+page+'"]').attr('enable')!='false'){
+      if(!history)
+      last_view_page = data.page;
       data.page = page;
       $('#header .main-menu li').removeClass();
       $('#header .main-menu li[data-index="'+data.page+'"]').addClass('active');
       $('.view').hide();
       $('.view[data-index="'+data.page+'"]').show();
+      if(page==2)
+        MenuContent.ChangeMainBack();
+      if(page==5)
+        MenuContent.ChangeSearch();
     }
   };
+  //view 7
+  add_QuickSearch = ( d, id, animate) => {
+    var html = $($('#view-7-section')[0].outerHTML);
+    $(html).find('.keyword').text(d).bind('click', function(){
+      $('#search-bar').val($(this).text());
+      call_search();
+    });
+    $(html).find('.delete').attr('data-keyword',d).bind('click', function(){
+      $(this).parents('li').hide(100, function(){$(this).remove()})
+      data.search_data.splice(data.search_data.indexOf(d),1);
+      save_data();
+    });
+    $(html).attr('id','quick-search-'+id).show().prependTo('#view-7-container');
+    if(animate)
+    Materialize.showStaggeredList('#view-7-container')
+  }
+
+  call_search = () => {
+    $('#view-5 .container').html('');
+          $('.main-menu li[data-index=5]').attr('enable','true');
+          change_page(5);
+          search_page = 1;
+          search_to_end = false;
+          load_search(search_page-1);
+          first_search = false;
+  }
+
   //view 3
   function re_down(d,id){
     if(typeof d =='object' && d ){
@@ -370,13 +447,13 @@ function Hentai($){
       t.data_loader.parseImage( dat.img, html,function( url, obj){
          obj.children('.board-left').children('.list-clover-image').attr('src',url);
       });
-      html.children('.board-right').children('.list-name').text(dat.name);
+      html.find('.board-right .list-name').text(dat.name);
       $(html).show().bind('dblclick',function(){
 
       });
-      var bt_p_s = $(html).children('.board-right').children('.list-button').children('.button-p-s');
-      var bt_del = $(html).children('.board-right').children('.list-button').children('.button-delete');
-      var bt_open = $(html).children('.board-right').children('.list-button').children('.button-open');
+      var bt_p_s = $(html).find('.board-right .list-button .button-p-s');
+      var bt_del = $(html).find('.board-right .list-button .button-delete');
+      var bt_open = $(html).find('.board-right .list-button .button-open');
       bt_open.attr('data-id',id||data.now).bind('click',function(){
         shell.showItemInFolder(setting.path+t.downloader.replace_path(data.data[$(this).attr('data-id')].name)+'/');
         //gui.Shell.showItemInFolder(setting.path+replace_path(data.data[$(this).attr('data-id')].name)+'/');
@@ -399,8 +476,8 @@ function Hentai($){
         bt_p_s.attr('data-id',data.now);
       }else{
         html.attr('id','download-'+id);
-        $(html).children('.board-right').children('.list-state').text(dat.nowdownload+'/'+dat.max);
-        $(html).children('.board-right').children('.download-bar').children('.progress').css('width',(dat.nowdownload/dat.max)*100+'%');
+        $(html).find('.board-right .list-state').text(dat.nowdownload+'/'+dat.max);
+        $(html).find('.board-right .download-bar .determinate').css('width',(dat.nowdownload/dat.max)*100+'%');
         bt_p_s.attr('data-id',id).text('繼續');
         if(dat.max==dat.nowdownload)
         bt_p_s.remove();
@@ -411,9 +488,13 @@ function Hentai($){
   }
   function p_s_download( id){
     if(data.data[id]){
-      if(data.data[id].pause)
-      data.data[id].pause = false;
-      else data.data[id].pause = true;
+      if(data.data[id].pause){
+        data.data[id].pause = false;
+        $('#download-'+id).find('.loading').addClass('indeterminate');
+      }else{ 
+        data.data[id].pause = true;
+        $('#download-'+id).find('.loading').removeClass('indeterminate');
+      }
       $('#download-'+id+' .button-p-s').text(data.data[id].pause?'繼續':'暫停');
       t.downloader.download_file(id);
     };
@@ -446,6 +527,7 @@ function Hentai($){
     save_data();//New
     $('#header .main-menu li[data-index="2"]').attr('enable','true');
     change_page(2);
+    MenuContent.ChangeMainBack();//更換menu
     $('#detail-name').text(dat.name);
     t.data_loader.parseImage( dat.img, null, function( url){
       $('#detail-background').css('background-image','url('+url+')').css('background-position','50%');
@@ -546,7 +628,7 @@ function Hentai($){
   function add_view1_list( data, view){
     for(var i in data){
       if(isNumeric(i)){
-        var html = $($(view+'-view')[0].outerHTML)/*.attr('id','view-1-id-'+data[i].href.replace('http://','').split('/')[2])*/;
+        var html = $($('#view-1-view')[0].outerHTML)/*.attr('id','view-1-id-'+data[i].href.replace('http://','').split('/')[2])*/;
         //html.attr('title',data[i].name).attr('data-url',data[i].href);
         html.children('.board-right').children('.card-content').children('.list-name').children('span.text').text(data[i].name);
         html.children('.board-right').children('.card-content').children('.list-rank').children('span.text').text(data[i].rank);

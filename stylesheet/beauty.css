@@ -12,15 +12,6 @@ body{
   position: relative;
 }
 
-.view{
-  margin-top:0px;
-  height: -webkit-calc(100% - (63px));
-  width: 100%;
-  display: block;
-  overflow: auto;
-  position: absolute;
-}
-
 /*修正disable*/
 nav li[enable=true]:hover {
     background-color: rgba(0,0,0,0.1);
