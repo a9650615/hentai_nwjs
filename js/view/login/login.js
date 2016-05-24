@@ -7,7 +7,7 @@ var $ = global.$;
 
 exports.events = () => {
 	let username = localStorage.getItem('UserName');
-	$('#header .main-menu li[data-index=6]').text(username?username:'登入');
+	$('#header .main-menu li[data-index=6]>a').text(username?username:'未登入');
 	
 	if(localStorage.getItem('UserName')){
 		$('#login-box').hide();
@@ -21,7 +21,7 @@ exports.events = () => {
 		global.update_usercookie();
 		$('#login-box').fadeIn(100);
 		$('#view-6-member-setting').hide();
-		$('#header .main-menu li[data-index=6]').text('登入');
+		$('#header .main-menu li[data-index=6]>a').text('未登入');
 	});
 
 	$('#login-button').on('click',function( ){
@@ -37,7 +37,7 @@ exports.events = () => {
 				setTimeout( () => {
 					$('#login-box').fadeOut(300);
 					$('#view-6-member-setting').fadeIn(300);
-					$('#header .main-menu li[data-index=6]').text(username);
+					$('#header .main-menu li[data-index=6]>a').text(username);
 				});
 			};
 		});

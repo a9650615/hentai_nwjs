@@ -1,5 +1,11 @@
+@font-face {
+  font-family: SystemFont;
+  src: url("fonts/冬青黑体W3.otf") format("opentype");
+}
+
+
 body{
-  font-family: "微軟正黑體";
+  font-family: SystemFont;
   font-size: 18px;
   margin: 0px;
   overflow: hidden;
@@ -99,7 +105,7 @@ input[type="password"],input[type="search"],.bottom_line{
   width: 100%;
   height: 160px;
   max-width: 500px;
-  background-size: cover;
+  background-size: auto 100%;
   background-position: center center;
   background-repeat: no-repeat;
 }
@@ -227,6 +233,9 @@ span.text{
 }
 #search-bar:focus{
   border-bottom: rgb(102, 204, 255) 1px solid;
+}
+#search-bar::selection{
+    background: #90CAF9;
 }
 .list-item.list-auto:active{
   background: rgba(200,200,200, 0.92);

@@ -8,8 +8,13 @@
         <!--<script src="js\view.js"></script>-->
         <!--<script src="js\extend\mootools-yui-compressed.js"></script>-->
         <script src="js\hentai.js"></script>
+        <script src="js/extend/hammer.min.js"></script>
+        <script src="stylesheet/materialize/js/materialize.min.js"></script>
         <link rel="stylesheet" href="stylesheet/font-awesome/css/font-awesome.min.css">
-        <link rel=stylesheet type="text/css" href="stylesheet/main.css"/>
+        <!--<link rel=stylesheet type="text/css" href="stylesheet/main.css"/>-->
+        <link rel=stylesheet type="text/css" href="stylesheet/materialize/css/materialize.min.css"/>
+        <link rel=stylesheet type="text/css" href="stylesheet/icon.css"/>
+        <link rel=stylesheet type="text/css" href="stylesheet/main_new.css"/>
         <link rel=stylesheet type="text/css" href="stylesheet/beauty.css"/>
     </head>
     <body ng-controller="body">
@@ -17,97 +22,139 @@
             console.log(process.memoryUsage());
         </script>
         <!--header-->
-        <div id="header">
-            <ul class="main-menu">
-                <li enable="true" data-index="1">瀏覽</li>
-                <li enable="false" data-index="2">詳細</li>
-                <li enable="true" data-index="3">下載</li>
-                <li enable="true" data-index="4">設定</li>
-                <li enable="false" data-index="5"><input id="search-bar" placeholder="輸入關鍵字或網址" type="search"></li>
-                <li enable="true" data-index="6">未登入</li>
-            </ul>
+        <div class="navbar-fixed">
+          <nav>
+            <div id="header" class="nav-wrapper container">
+                <ul  class="left main-menu menu">
+                    <li enable="true" class="active" data-index="1"><a class="waves-effect">瀏覽</a></li>
+                    <li enable="false" data-index="2"><a  class="waves-effect">詳細</a></li>
+                    <li enable="true" data-index="3"><a  class="waves-effect">下載</a></li>
+                    <li enable="true" data-index="4"><a  class="waves-effect">設定</a></li>
+                    <!--<li enable="false" data-index="5"><input id="search-bar" placeholder="輸入關鍵字或網址" type="search"></li>-->
+                </ul>
+                <ul class="right main-menu menu">
+                  <li enable="true" data-index="6"><a  class="waves-effect">未登入</a></li>
+                </ul>
+                <div id="search-section" class="menu" style="display: none;">
+                    <div class="input-field">
+                        <input id="search-bar" placeholder="輸入關鍵字或網址" type="search">
+                        <label id="view-1-callmenu"><i class="material-icons waves-effect">arrow_back</i></label>
+                        <i id="search-bar-clear" class="material-icons">close</i>
+                        <i id="add-to-fast-search" class="material-icons search_two tooltipped" data-delay="50" data-tooltip="添加到快速搜尋">playlist_add</i>
+                    </div>
+                </div>
+                <div id="back-section" class="menu" style="display: none;">
+                    <ul>
+                        <li id="back-to-menu"><i class="material-icons waves-effect">arrow_back</i></li>
+                    </ul>
+                </div>
+            </div>
+          </nav>
         </div>
         <!--header End-->
         <!--List -->
         <!--List 1-->
-        <div id="view-1-view" class="list-item list-auto view-detail" style="display:none;">
-            <div class="board-left">
-                <div class="list-clover-image"></div>
+        <div id="view-1-view" class="col s12 l7 card" style="display:none;">
+            <div class="card-image board-left">
+                <img class="list-clover-image" />
             </div>
-            <div  class="board-right">
-                <div class="list-name wrap"><span class="text">Name</span></div>
-                <div class="list-rank"><i class="fa fa-star"></i><span class="text">Rank</span></div>
-                <div class="list-type"><i class="fa fa-file-o"></i><span class="text">Type</span></div>
+            <div  class="right-content board-right">
+                <div class="card-content">
+                  <div class="list-name card-title "><span class=" text">Name</span></div>
+                  <div class="list-rank"><i class="fa fa-star"></i><span class="text">Rank</span></div>
+                  <div class="list-type"><i class="fa fa-file-o"></i><span class="text">Type</span></div>
+                </div>
+                <div class="card-action">
+                  <a class="action-detail waves-effect waves-light btn" href="#">詳細內容</a>
+                </div>
             </div>
         </div>
-        <div class="view list" id="view-1" ng-controller="view-1" data-index="1">
-            <div class="selecter">
-                類型: 
-                <select id="view-1-typeselect"> 
-                	<option value="0">全部</option>
-                </select>
-                <button id="view-1-refresh" class="btn-beat gb_fa">更新</button>
-            </div>
+        <div class="view" id="view-1" data-index="1">
+          <div id="view-1-container" class="container row">
+              <div class="selecter">
+                  <div class="input-field col s6">
+                      <select id="view-1-typeselect"> 
+                            <option value="" disabled selected>選擇</option>
+                        <option value="0">全部</option>
+                      </select>
+                      <label>類型篩選</label>
+                  </div>
+                  <button id="view-1-refresh" class="btn-beat gb_fa">更新</button>
+              </div>
+          </div>
+          <a href="#" id="view-1-callsearch" class="float-bottom waves-effect waves-circle waves-light btn-floating secondary-content">
+              <i class="material-icons">search</i>
+          </a>
         </div>
         <!--List 2-->
         <div class="view" data-index="2">
-            <div id="detail-front" class="container">
-                <div class="board-left">
-                    <div>
-                        <div id="detail-image" class="list-clover-image" ></div>
-                    </div>
-                    <div>
+            <div id="detail-front" class="container row">
+                <div class="col s12 l10 card">
+                  <div class="card-image">
+                       <img id="detail-image" />
+                  </div>
+                  <div  class="right-content board-right">
+                    <div class="card-content">
+                        <div id="detail-time">2015-10-09 18:02</div>
+                        <div id="detail-language">Language</div>
+                        <div>
+                            <div id="detail-addfavorite-section" class="row">
+                                <select id="detail-favoriteid" class="col s6"></select>
+                                <button id="detail-addfavorite" class="btn-beat">加到最愛</button>
+                            </div>
+                            <button id="detail-removefavorite" class="btn-beat">移除最愛</button>
+                        </div>
                         <button id="detail-download" class="btn-beat">下載閱讀畫質</button>
                         <button id="detail-source-download" class="btn-beat">下載原畫質</button>
                         <button id="detail-view" class="btn-beat">閱讀</button>
                     </div>
+                  </div>
                 </div>
-                <div class="board-right">
-                    <div id="detail-name" class="wrap" title="">[Mainichi Sono Basho Shinogi (Kuroinu)] Chuunibyou Dattakedo! (Chuunibyou demo Koi ga Shitai!) [Thai] [Tomkung_54]</div>
-                    <div id="detail-time">2015-10-09 18:02</div>
-                    <div id="detail-language">Language</div>
-                    <div>
-                        <div id="detail-addfavorite-section">添加至: 
-                            <select id="detail-favoriteid"></select>
-                            <button id="detail-addfavorite" class="btn-beat">加到最愛</button>
-                        </div>
-                        <button id="detail-removefavorite" class="btn-beat">移除最愛</button>
+                <div id="detail-comments" class="col s12 l10  card">
+                    <div id="detail-comment-view" class="comment" style="display: none;">
+                        <div class="comment-user"><span>{{User}}</span></div>
+                        <div class="comment-msg"><span>{{Message}}</span></div>
+                        <div class="comment-log"><span>{{Log}}</span></div>
                     </div>
                 </div>
             </div>
-            <div id="detail-comments" class="container">
-                <div id="detail-comment-view" class="comment">
-                    <div class="comment-user"><span>{{User}}</span></div>
-                    <div class="comment-msg"><span>{{Message}}</span></div>
-                    <div class="comment-log"><span>{{Log}}</span></div>
-                </div>
-            </div>
+            <div id="detail-name" class="container" title="">[Mainichi Sono Basho Shinogi (Kuroinu)] Chuunibyou Dattakedo! (Chuunibyou demo Koi ga Shitai!) [Thai] [Tomkung_54]</div>
             <div id="detail-background"></div>
         </div>
         <!--List 3-->
-        <div class="view list" id="view-3" data-index="3">
-            <div id="view-3-view" class="list-item" style="display:none;">
-                <div class="board-left">
-                    <div class="list-clover-image"></div>
-                </div>
-                <div  class="board-right">
-                    <div class="list-name wrap">Name</div>
-                    <div class="download-bar">
-                        <div class="progress" style="width:0px;"></div>
-                    </div>
-                    <div class="list-state">State</div>
-                    <div class="list-button">
-                        <button class="button-p-s btn-beat">暫停</button>
-                        <button class="button-delete btn-beat">刪除紀錄</button>
-                        <button class="button-open btn-beat">開啟資料夾位置</button>
-                    </div>
-                </div>
-            </div>
+        <div class="view" id="view-3" data-index="3">
+          <div id="view-3-view" class="col s12 l7 card" style="display:none;">
+              <div class="card-image board-left">
+                  <img class="list-clover-image" />
+              </div>
+              <div  class="right-content board-right">
+                  <div class="card-content">
+                      <div class="list-name card-title">Name</div>
+                      <div class="download-bar progress">
+                          <div class="determinate green" style=""></div>
+                          <div class=" green loading"></div>
+                      </div>
+                      <div class="list-state">State</div>
+                  </div>
+                  <div class="card-action list-button">
+                      <button class="button-p-s btn-beat">暫停</button>
+                      <button class="button-delete btn-beat">刪除紀錄</button>
+                      <button class="button-open btn-beat">開啟資料夾位置</button>
+                  </div>
+              </div>
+          </div>
+          <div class="container row">
+          </div>
         </div>
         <!--List 4-->
         <div class="view" data-index="4">
-            <div>
+            <div class="container">
                 <div class="setting_list">
+                    <p class="menu-item menu-title">下載設置:</p>
+                     <div class="menu_item">
+                            <label for="view4-download-line-number">下載線程數</label>
+                            <input type="number" id="view4-download-line-number" />
+                    </div>
                     <p class="menu-item menu-title">下載路徑</p>
                     <div class="setting_item menu_item">
                         <input readonly id="view4-dir-view-path">
@@ -123,36 +170,48 @@
             </div>
         </div>
         <!--List 5-->
-        <div id="view-5-view" class="list-item list-auto view-detail" style="display:none;">
-            <div class="board-left">
-                <div class="list-clover-image"></div>
-            </div>
-            <div  class="board-right">
-                <div class="list-name wrap"><span class="text">Name</span></div>
-                <div class="list-rank"><i class="fa fa-star"></i><span class="text">Rank</span></div>
-                <div class="list-type"><i class="fa fa-file-o"></i><span class="text">Type</span></div>
-            </div>
-        </div>
-        <div class="view list" id="view-5" ng-controller="view-5" data-index="5">
+        <div class="view" id="view-5"  data-index="5">
+            <div id="view-5-container" class="container row"></div>
         </div>
         <!--List 6-->
-        <div class="view" data-index="6">
-            <div id="view-6-member-setting" class="setting_list">
-            	   <p class="menu-item menu-title">相簿顯示設定:</p>
-                <div class="menu_item">
-                	<label for="view-6-show-jpn-title">顯示日文標題</label>
-		<input type="checkbox" id="view-6-show-jpn-title" />
-                </div>
-                <p class="menu-item menu-title">登出</p>
-                <div id="logout-button" class="setting_item">登出</div>
-              </div>
-            <div id="login-box" class="float-box login-box">
-                <div>帳號:<input  type="text" class="bottom_line" id="login-username" /></div>
-                <div>密碼:<input  type="password" id="login-password" /></div>
-                <div>
-                    <button class="btn-beat" id="login-button">登入</button>
-                    <span id="login-status"></span>
-                </div>
+        <div class="view row" data-index="6">
+            <div class="container">
+                            <div id="view-6-member-setting" class="setting_list">
+                                   <p class="menu-item menu-title">相簿顯示設定:</p>
+                                <div class="switch">
+                                    <label for="view-6-show-jpn-title">顯示日文標題</label>
+                                    <label>
+                                      <input type="checkbox" id="view-6-show-jpn-title" >
+                                      <span class="lever"></span>
+                                    </label>
+                                  </div>
+                                <p class="menu-title">登出</p>
+                                <div id="logout-button" class="waves-effect col s12">登出</div>
+                            </div>
+                            <div id="login-box" class="row col s6 z-depth-4 card-panel ">
+                               <form class="login-form">
+                                   <div>帳號:<input  type="text" class="bottom_line" id="login-username" /></div>
+                                   <div>密碼:<input  type="password" id="login-password" /></div>
+                                   <div class="input-field col s12">
+                                       <a class="btn waves-effect waves-light col s12" id="login-button">登入</a>
+                                       <span id="login-status"></span>
+                                   </div>
+                               </form>
+                            </div>
+            </div>
+        </div>
+        <!--List 7 快速搜尋選單-->
+        <div class="view" id="view-7"  data-index="7">
+            <li id="view-7-section" style="display: none;" class="collection-item">
+                <a class="waves-effect">
+                    <span class="keyword"></span>
+                    <a href="#" class="delete waves-effect secondary-content"><i class="material-icons">close</i></a>
+                </a>
+            </li> 
+            <div class="container row">
+                <ul class="with-header collection"><li class="collection-header"><h5>快速搜尋</h5></li></ul>
+                <ul id="view-7-container" class="collection">
+                </ul> 
             </div>
         </div>
         <!--List End-->
