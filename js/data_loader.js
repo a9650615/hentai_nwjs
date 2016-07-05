@@ -63,7 +63,7 @@ var praser = {
 	ret:function( req){
 		req( this.data);
 	},
-	list : function( html, req){
+	list : function( html, req){ //取讀列表
 		this._p(html);
 		var rank = 0,data={},t;		
 		this.html.find('tr.gtr0,tr.gtr1').each(function(i,e){
@@ -100,8 +100,8 @@ var praser = {
 		data.end = notend == end[1] ? true:false;
 		this.data = data;
 		this.ret( req);
-	}, // Ö÷í“Ãæ½âÎö
-	g : function( html, req){ // Ô”¼ší“Ãæ½âÎö
+	}, 
+	g : function( html, req){ // 取得相簿
 		this._p(html);
 		var data = {},type = '',t;
 		data.img = this.html.find('#gleft>#gd1>img').attr('src');

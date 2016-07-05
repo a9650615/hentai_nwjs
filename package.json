@@ -9,9 +9,26 @@
     "icon": "/stylesheet/icon.png",
     "toolbar": true
   },
+  "configurations": [
+    {
+      "name": "Launch Electron App",
+      "type": "node",
+      "program": "js/hentai.js", // important
+      "stopOnEntry": false,
+      "args": [],
+      "cwd": ".",
+      // next line is very important
+      "runtimeExecutable": "node_modules/electron-prebuilt/dist/electron",
+      "runtimeArguments": [],
+      "env": {},
+      "sourceMaps": false
+    }
+  ],
   "devDependencies": {
     "electron-connect": "^0.3.7",
     "electron-packager": "^6.0.0",
+    "eslint": "^3.0.0",
+    "eslint-config-google": "^0.6.0",
     "gulp": "^3.9.1"
   }
 }

@@ -1,0 +1,124 @@
+
+/* 修正navbar z高度 */
+.navbar-fixed { 
+	z-index: 1000;
+ }
+/* 讓navbar 可以高於 toast  */
+#toast-container {
+	z-index: 999 !important;
+}
+
+.view {
+  margin-top:0px;
+  height: -webkit-calc(100% - (63px));
+  width: 100%;
+  display: block;
+  overflow: auto;
+  position: absolute;
+}
+
+.float-bottom{
+	position: fixed;
+	right:  5%;
+	bottom: 5%;
+	line-height: 120%;
+	z-index: 10;
+}
+
+.btn-floating i{
+	line-height: 45px;
+}
+
+.parallax-container {
+      height: 50%;
+}
+
+.comment-msg{
+	word-break: break-all;
+}
+
+.menu-title{
+	font-size: 0.8em;
+	color:  #009688;
+	border-bottom: 0px;
+}
+
+.search_two{
+	right: 4rem !important;
+}
+.margin-top{
+	margin-top: 5px;
+}
+
+/*.indeterminate{
+	display: block;
+	height: 5px;
+	overflow: hidden;
+}*/
+
+.progress .indeterminate.green{
+	background-color: #4DB6AC !important;
+}
+
+.determinate.green{
+	background-color: #26a69a;
+	z-index: 10;
+}
+
+#detail-name{
+	z-index: 10;
+	position: absolute;
+	top: 100px;
+	left: 0px;
+	right: 0px;
+	margin: auto;
+	background: rgba(0,0,0,0.3);
+	color: white;
+	text-shadow: 0px 1px 1px #ccc;
+	color: #fff;
+    	padding: 20px;
+}
+
+#login-box{
+	position:absolute;
+	left: 0px;
+	right: 0px;
+	margin-right: auto;
+	margin-left: auto;
+	min-height: 250px;
+}
+
+#detail-tags{
+	padding: 10px 5px;
+}
+
+#detail-front{
+	margin-top: 300px;
+	position: relative;
+	z-index: 10;
+}
+
+#detail-background{
+  position: absolute;
+  top: 0px;
+  left: 0;
+  width: 100%;
+  height: 300px;
+  background-size: cover;
+  background-position: top center;
+  background-repeat: no-repeat;
+  -webkit-filter: grayscale(0.5) blur(10px);
+  z-index: 0;
+}
+
+@media only screen and (min-width: 601px){
+	.float-bottom{
+		right:  10%;
+	}
+}
+
+@media only screen and (min-width: 1828px){
+	.float-bottom{
+		right:  calc((100vw - 1280px)/2);
+	}
+}

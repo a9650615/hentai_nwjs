@@ -24,8 +24,8 @@ exports.openView = function ( da ){
 		show: false
 	});
 
-	if(!global.setting.debug)
-	data.window.setMenu(null);
+	//if(!global.Setting.debug)
+	//data.window.setMenu(null);
 	
 	try{
 		data.window.on('closed', function() {
@@ -52,8 +52,8 @@ exports.openView = function ( da ){
 	  //var win = global.gui.Window.get(data.window);
 	  console.log('loaded');
 	  data.window.webContents.executeJavaScript(
-	  	'data ='+JSON.stringify(data)+';global.Data='+
-	  	JSON.stringify({data: global.Data.data})+
+	  	'data ='+JSON.stringify(data)+';global.ProgramData='+
+	  	JSON.stringify(global.ProgramData)+
 	  	';dir='+JSON.stringify(global.__dir)+
 	  	';global.Setting={};global.Setting.UserCookie='+JSON.stringify(global.Setting.UserCookie)+';'+
 	  	';Viewer.init();');

@@ -66,6 +66,7 @@
                 </div>
                 <div class="card-action">
                   <a class="action-detail waves-effect waves-light btn" href="#">詳細內容</a>
+                  <a class="action-copy waves-effect waves-light btn" href="#">複製連結</a>
                 </div>
             </div>
         </div>
@@ -110,6 +111,12 @@
                     </div>
                   </div>
                 </div>
+                <!-- Tag 標籤區 -->
+                <div id="detail-tags" class="col s12 l10 card">
+                  <div class="chip">
+                    Tag
+                  </div>
+                </div>
                 <div id="detail-comments" class="col s12 l10  card">
                     <div id="detail-comment-view" class="comment" style="display: none;">
                         <div class="comment-user"><span>{{User}}</span></div>
@@ -152,8 +159,8 @@
                 <div class="setting_list">
                     <p class="menu-item menu-title">下載設置:</p>
                      <div class="menu_item">
-                            <label for="view4-download-line-number">下載線程數</label>
-                            <input type="number" id="view4-download-line-number" />
+                            <label for="view4-download-line-number">下載線程數 ( -1 為無限制 )</label>
+                            <input type="number" id="view4-download-line-number" min="-1" />
                     </div>
                     <p class="menu-item menu-title">下載路徑</p>
                     <div class="setting_item menu_item">
