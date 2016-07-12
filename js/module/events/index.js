@@ -1,4 +1,5 @@
 var exports = module.exports = {};
+const {dialog} = require('electron').remote;
 //modules
 let ToolBar = require('../toolbar');
 let Save = require('../save');
@@ -8,6 +9,8 @@ let Data_Loader = require('../data_loader');
 let Views = {};
 Views.ListView = require('../../view/ListView');
 Views.DetailView = require('../../view/DetailView');
+Views.DownLoadView = require('../../view/DownLoadView');
+
 //data
 let can_load = {
   'search' : true,
@@ -116,10 +119,8 @@ exports.events = () => {
 
 	$('#view-4-GallaryTypeSave').on('click', () => {  //儲存TYPE名稱設定
 	  let data = {};
-	  console.log(setting);
 	  $('#view-4-GallaryType input').each( ( i, h) => {
 	      if(h.value){
-	        setting.GallaryTypes[h.name] = h.value;
 	        global.Setting.GallaryTypes[h.name] = h.value;
 	      };
 	  });
@@ -182,13 +183,13 @@ exports.events = () => {
 	  };
 	});
 	$('#detail-download').bind('click',function(){//下載
-	  add_view3();
+	  Views.DownLoadView.add_download_view();
 	  ToolBar.change_page(3);
 	  MenuContent.ChangeMainMenu();
 	});
 
 	$('#detail-source-download').bind('click',function(){//下載
-	  add_view3( null, null, true);
+	  Views.DownLoadView.add_download_view( null, null, true);
 	  ToolBar.change_page(3);
 	  MenuContent.ChangeMainMenu();
 	});
@@ -218,7 +219,6 @@ exports.events = () => {
 	});
 
 	$('#view4-dir-path').on('click',function(){
-	    //console.log(dialog.showOpenDialog({ properties: [ 'openFile', 'openDirectory']}));
 	    global.Setting.path = (dialog.showOpenDialog({ properties: [ 'openFile', 'openDirectory']}) || global.Setting.path);
 	    if(global.Setting.path.slice(-1) != '/') global.Setting.path += '/';
 	    $('#view4-dir-view-path').val(global.Setting.path);

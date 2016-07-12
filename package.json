@@ -13,11 +13,10 @@
     {
       "name": "Launch Electron App",
       "type": "node",
-      "program": "js/hentai.js", // important
+      "program": "js/hentai.js",
       "stopOnEntry": false,
       "args": [],
       "cwd": ".",
-      // next line is very important
       "runtimeExecutable": "node_modules/electron-prebuilt/dist/electron",
       "runtimeArguments": [],
       "env": {},
@@ -25,10 +24,9 @@
     }
   ],
   "devDependencies": {
-    "electron-connect": "^0.3.7",
+    "electron-connect": "^0.3.9",
     "electron-packager": "^6.0.0",
-    "eslint": "^3.0.0",
-    "eslint-config-google": "^0.6.0",
+    "electron-prebuilt": "^1.2.6",
     "gulp": "^3.9.1"
   }
 }

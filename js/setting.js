@@ -15,3 +15,5 @@ exports.GallaryTypes = {
 	'asianporn' : 'ASIAN PORN',
 	'misc' : 'MISC'
 };
+exports.debug = false;
+exports.download_threads = -1;

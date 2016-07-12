@@ -7,32 +7,15 @@ var fs = require('fs');
 var nwPath = process.execPath;
 var nwDir = path.dirname(nwPath);
 var data_loader = require( '../data_loader');
+
+let Notice = require('../Notice')
 //console.log(global);
-var data;
-var setting;
+// var data;
+// var setting;
 
 function save_data(){//臨時
     fs.writeFile(nwDir+'/data.json',JSON.stringify(data));
 };
-function alert(data){
-      if(typeof data == 'object')
-      var options = {
-            icon: ".\\stylesheet\\icon.png",
-            body: data.message
-        };
-      else
-        var options = {
-            icon: ".\\stylesheet\\icon.png",
-            body: data
-        };
-      var notification = new Notification("提示",options);
-        notification.onclick = function () {
-            notification.close();
-        }
-
-        notification.onshow = function () {
-        };
-  };
 
 exports.create_path = function (path){
     //var stats = fs.lstatSync(path);
@@ -45,19 +28,15 @@ exports.create_path = function (path){
     });
   };
 
-exports.replace_path = function (path){
+  exports.replace_path = function (path){
     return path.replace('/','').replace('.','').replace('\\','').replace(':','').replace('*','')
     .replace('?','').replace('"','').replace('<','').replace('>','').replace('|','');
   };
+  exports.add_to_download_list = ( ) => {
+    //global.Data.data[]
+  }
 
   exports.download_file = function ( id, func){
-      try{
-        data = require(nwDir+'/data.json');
-        setting = require(nwDir+'/setting.json');
-      }catch(e){
-
-      }
-
       if(!data.data[id].pause){
         if(data.data[id].name)
         exports.create_path(setting.path+exports.replace_path(data.data[id].name)+'/');

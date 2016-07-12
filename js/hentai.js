@@ -3,18 +3,18 @@ global.__dir = __dirname;
 var path = require('path');
 var nwPath = process.execPath;
 var nwDir = path.dirname(nwPath);
-var remote = require('remote');
-var dialog = remote.require('dialog');
+const {dialog} = require('electron');
 let shell = require('electron').shell;
 let {clipboard} = require('electron');
 
-window.$ = window.jQuery = require('./js/extend/jquery-1.11.3.js');
+window.$ = window.jQuery = require('./js/extend/jquery-2.1.4.min.js');
 global.$ = window.$;
 global.UserService = require('./js/module/UserService');
 global.Setting = require('./js/setting.js');
 global.ProgramData = {  //不存到data的程式資料
   base : 'http://exhentai.org' ,/*'http://yeeee.ddns.net:8008/index.php/api/'*/
   page : 1 ,
+  now: null,
   nowdata: {}
 };
 
@@ -25,15 +25,16 @@ function update_usercookie(){
 global.update_usercookie = update_usercookie;
 
 //extra library
-var ToolBar = require('./js/module/toolbar/index.js');
-var Save = require('./js/module/save/index.js');
+var ToolBar = require('./js/module/toolbar');
+var Save = require('./js/module/save');
+let  Notice = require('./js/module/Notice');
 //view library
 var LoginContent = require('./js/view/login/login.js');
 var MenuContent = require('./js/view/menu/menu.js');
 
 /*錯誤處理*/
 process.on('uncaughtException', function (er) {
-  console.log(er);
+  //console.log(er);
   console.log(er.stack)
 });
 
@@ -52,29 +53,20 @@ window.addEventListener('error' ,function(errEvent){
 function Hentai($){
   global.$ = $; // 定義全域
   var fs = require('fs'); // require only if you don't already have it
-  //var mkdirp = require('mkdirp');
   var request = require('request');
-  //var remote = require("remote");
-  //var ipc = require('ipc');
-  //dialog.showMessageBox({message:mainWindow});
   var PATH = {
     'js' : './js/module/'//nwDir + '\\js\\',
   };
-  var setting = {
-    path : nwDir + '/download/',
-    debug : false,
-    GallaryTypes: {},
-    download_threads:  -1 ,
-  };
-  global.Setting = setting;
+  global.Setting.path = nwDir + '/download/';
   
   var data = {
-    now : 0,
-    data:[],
-    id : 0,
-    download_id:0,
+    download_data: {
+      running: {},
+      paused: {}
+    },
     search_data:[]
   };
+
   update_usercookie();//取得會員資料
   global.Data = data;
   this.Menu        = require( PATH.js + 'menu');
@@ -82,33 +74,9 @@ function Hentai($){
   var Events = require('./js/module/events/index.js'); //事件加載
   // this.viewer      = require( PATH.js + 'viewer');
   var t = this;
-  
-  function alert(data){
-      if(typeof data == 'object')
-      var options = {
-            icon: ".\\stylesheet\\icon.png",
-            body: data.message
-        };
-      else
-        var options = {
-            icon: ".\\stylesheet\\icon.png",
-            body: data
-        };
-      var notification = new Notification("提示",options);
-        notification.onclick = function () {
-            notification.close();
-        }
 
-        notification.onshow = function () {
-          // play sound on show
-          //myAud=document.getElementById("audio1");
-          //myAud.play();
-
-          // auto close after 1 second
-          //setTimeout(function() {notification.close();}, 6000);
-        };
-  };
   function init(){
+    let setting;
     try{
       data = require(nwDir+'/data.json');
     }catch(e){
@@ -116,11 +84,13 @@ function Hentai($){
     }
     try {
       setting = require(nwDir+'/setting.json');
-      global.Setting = setting;
+      for(var i in setting){
+        global.Setting[i] = setting[i];
+      }
     }
     catch (e) {
-      alert({title:'歡迎使用!',message:'第一次使用建議至設定調整下載路徑'});
-      save_setting();
+      Notice.alert({title:'歡迎使用!',message:'第一次使用建議至設定調整下載路徑'});
+      Save.save_setting();
     };
     for(var i in data.data){
        re_down(data.data[i],i);
@@ -138,8 +108,6 @@ function Hentai($){
       //console.log(setting.debug);
     if(setting.debug)
           win.showDevTools();
-    /*Load Modules*/
-    t.downloader      = require( PATH.js + 'downloader');
     /*Load Modules*/
     Events.events();
     ToolBar.change_page(1);
@@ -175,13 +143,13 @@ var log = function(d){
     if(setting.debug)
     console.log(d);
   };
-  //console.log(UserService.uConfig(UserService.SiteData('uconfig'), 'tl','j'));
+
   init();
   //return can_load;
   return this;
 };
+
 var Main ;
 $(document).ready(function(){
   Main = new Hentai(window.$);
-  ToolBar.change_page(2)
 });

@@ -6,8 +6,7 @@ let Data_Loader = require('../../module/data_loader');
 exports.load_detail = ( url ) => {
     var url = url.split('/');
     var id = url[4];
-    global.ProgramData.now = global.ProgramData.id++;
-
+    global.ProgramData.now = id;
     Data_Loader.parseData('detail',
       {
         _url_ : [url[3],url[4],url[5]].join('/')+'/?hc=1'
@@ -21,7 +20,6 @@ exports.load_detail = ( url ) => {
   exports.view = ( dat, id) => {
     console.log(dat);
     global.ProgramData.nowdata = dat;
-    global.ProgramData.id = id;
     //save_data();//好像沒有意義
     $('#header .main-menu li[data-index="2"]').attr('enable','true');
     ToolBar.change_page(2);
