@@ -72,7 +72,6 @@ function Hentai($){
   this.Menu        = require( PATH.js + 'menu');
   this.data_loader = require( PATH.js + 'data_loader');
   var Events = require('./js/module/events/index.js'); //事件加載
-  // this.viewer      = require( PATH.js + 'viewer');
   var t = this;
 
   function init(){
@@ -99,6 +98,7 @@ function Hentai($){
        add_QuickSearch(data.search_data[i], i);
     }
     //取代TYPE名稱設定
+    if(setting)
     for(let i in setting.GallaryTypes){
        global.Setting.GallaryTypes[i] = setting.GallaryTypes[i];
     }
@@ -106,12 +106,12 @@ function Hentai($){
       $('#view-6-show-jpn-title').attr("checked",true);
     }
       //console.log(setting.debug);
-    if(setting.debug)
+    if(global.Setting.debug)
           win.showDevTools();
     /*Load Modules*/
     Events.events();
     ToolBar.change_page(1);
-    $('#view4-dir-view-path').val(setting.path);
+    $('#view4-dir-view-path').val(global.Setting.path);
   }
  
   //view 7
