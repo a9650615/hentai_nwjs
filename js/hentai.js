@@ -14,6 +14,10 @@ global.Setting = require('./js/setting.js');
 global.ProgramData = {  //不存到data的程式資料
   base : 'http://exhentai.org' ,/*'http://yeeee.ddns.net:8008/index.php/api/'*/
   page : 1 ,
+  DownLoadOrder: {
+    Running: [],
+    Waiting: []
+  },
   now: null,
   nowdata: {}
 };
@@ -25,13 +29,14 @@ function update_usercookie(){
 global.update_usercookie = update_usercookie;
 
 //extra library
-var ToolBar = require('./js/module/toolbar');
-var Save = require('./js/module/save');
-let  Notice = require('./js/module/Notice');
+const DownLoad = require('./js/module/downloader');
+const ToolBar = require('./js/module/toolbar');
+const Save = require('./js/module/save');
+const Notice = require('./js/module/Notice');
 //view library
 var LoginContent = require('./js/view/login/login.js');
 var MenuContent = require('./js/view/menu/menu.js');
-
+var DownLoadView = require('./js/view/DownLoadView');
 /*錯誤處理*/
 process.on('uncaughtException', function (er) {
   //console.log(er);
@@ -60,15 +65,12 @@ function Hentai($){
   global.Setting.path = nwDir + '/download/';
   
   var data = {
-    download_data: {
-      running: {},
-      paused: {}
-    },
-    search_data:[]
+     DownLoadStatus:[],//{id,status}
+     Datas:{},
+     search_data:[]
   };
 
   update_usercookie();//取得會員資料
-  global.Data = data;
   this.Menu        = require( PATH.js + 'menu');
   this.data_loader = require( PATH.js + 'data_loader');
   var Events = require('./js/module/events/index.js'); //事件加載
@@ -77,7 +79,7 @@ function Hentai($){
   function init(){
     let setting;
     try{
-      data = require(nwDir+'/data.json');
+      global.Data = require(nwDir+'/data.json');
     }catch(e){
 
     }
@@ -91,8 +93,10 @@ function Hentai($){
       Notice.alert({title:'歡迎使用!',message:'第一次使用建議至設定調整下載路徑'});
       Save.save_setting();
     };
-    for(var i in data.data){
-       re_down(data.data[i],i);
+    for(var i in global.Data.Datas){
+      DownLoadView.add_download_view(global.Data.Datas[i]);
+      DownLoad.addDownLoadGallary( i, global.Data.Datas[i]);
+       //global.Data.Datas[i]
     }
     for(var i in data.search_data){
        add_QuickSearch(data.search_data[i], i);
@@ -135,7 +139,7 @@ function Hentai($){
     $('#view-5 .container').html('');
           $('.main-menu li[data-index=5]').attr('enable','true');
           ToolBar.change_page(5);
-          Events.load_search(search_page-1);
+          Events.load_search(0);
   }
 
   //view 5

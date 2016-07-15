@@ -20,6 +20,7 @@ exports.load_detail = ( url ) => {
   exports.view = ( dat, id) => {
     console.log(dat);
     global.ProgramData.nowdata = dat;
+    global.ProgramData.nowdata.Id = id;
     //save_data();//好像沒有意義
     $('#header .main-menu li[data-index="2"]').attr('enable','true');
     ToolBar.change_page(2);

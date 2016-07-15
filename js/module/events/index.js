@@ -5,6 +5,7 @@ let ToolBar = require('../toolbar');
 let Save = require('../save');
 let Viewer = require('../viewer');
 let Data_Loader = require('../data_loader');
+const Downloader = require('../../module/downloader')
 //views
 let Views = {};
 Views.ListView = require('../../view/ListView');
@@ -66,7 +67,6 @@ exports.events = () => {
 	$('#view4-download-line-number').val( global.Setting.download_threads );
 	$('#view4-download-line-number').on( 'change', ( event ) => {
 	  global.Setting.download_threads = $( event.currentTarget ).val();
-	  Save.save_setting();
 	})
 	//添加到快速搜尋
 	$('#add-to-fast-search').bind('click', () => {
@@ -183,7 +183,8 @@ exports.events = () => {
 	  };
 	});
 	$('#detail-download').bind('click',function(){//下載
-	  Views.DownLoadView.add_download_view();
+	  Views.DownLoadView.add_download_view(global.ProgramData.nowdata);
+		Downloader.addDownLoadGallary( global.ProgramData.now, global.ProgramData.nowdata);
 	  ToolBar.change_page(3);
 	  MenuContent.ChangeMainMenu();
 	});

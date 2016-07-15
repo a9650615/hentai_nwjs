@@ -223,6 +223,11 @@ exports.parseData = function ( type, data , req){
 		url = data._url_+url;
 	}
 	switch( type){
+		case 'gallary':
+			exports.load_url(url,function( html, res, e){
+				praser.gallary( html, req);
+			});
+			;break;
 		case 'list':
 			exports.load_url(url,function( html, res, e){
 				praser.list( html, req);
