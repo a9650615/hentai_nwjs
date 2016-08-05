@@ -220,8 +220,9 @@ exports.parseData = function ( type, data , req){
 exports.parseImage = function( url, id, returnfuc){
 	var opt = options;
 	//opt.path = url.replace(global.Data.data.base,'');
-	opt.host = url.replace('http://','').split('/')[0];
-	opt.path = url.replace('http://'+opt.host,'');
+	var url = url.replace('http://','').replace('https://','');
+	opt.host = url.split('/')[0];
+	opt.path = url.replace(opt.host,'');
 	//console.log(options.host + url.replace(global.Data.data.base,''));
 	var data = [];	
 	//console.log(options.path);

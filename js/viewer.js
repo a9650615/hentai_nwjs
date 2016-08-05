@@ -158,7 +158,7 @@ var Viewer = {
 		};
 
 		data_loader.parseData('image',{
-          _url_ : data.data.start.replace( global.Data.data.base,'')
+          _url_ : data.data.start.replace( global.Data.data.base,'').replace('https://exhentai.org/','')
         },function( da ){
         	temp.list_get = parseInt(da.now);
         	temp.list[da.now] = da;

@@ -84,7 +84,7 @@ function Hentai($){
   this.viewer      = require( PATH.js + 'viewer');
   var t = this;
   var search = {
-    g : /http:\/\/exhentai.org\/g\/+(\d*)\/[A-a1-9].*\//g
+    g : /http(.*):\/\/exhentai.org\/g\/+(\d*)\/+[A-za-z0-9].*\//g
   };
   function alert(data){
       if(typeof data == 'object')

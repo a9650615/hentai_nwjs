@@ -68,9 +68,10 @@ exports.replace_path = function (path){
           //ajax(da.image,function(dt){
           //  fs.writeFile( setting.path+data.data[id].name+'\\'+data.data[id].nowdownload+'.jpg',dt,func);
         });*/
+        console.log(data.data[id]);
         data_loader.parseData('image',
           {
-            _url_ : data.data[id].start.replace( global.Data.data.base,'')
+            _url_ : data.data[id].start.replace( global.Data.data.base,'').replace('https://exhentai.org/','')
           },
           function( da, e){
             if(e) console.log('阿斯'+e);
@@ -82,6 +83,7 @@ exports.replace_path = function (path){
             data.data[id].max = da.total*1;
             $('#download-'+id+' .board-right .card-content .list-state').text(data.data[id].nowdownload+'/'+da.total);
             $('#download-'+id).find('.download-bar').children('.determinate').css('width',(data.data[id].nowdownload/da.total)*100+'%');
+            console.log(da);
             console.log(da.fullimage);
             exports.save_file(
               id,
