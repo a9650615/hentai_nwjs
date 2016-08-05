@@ -55,10 +55,10 @@ const Status = require('./status');
   exports.changeDownloadStatus = ( chgStatus, data ) => {
     let oldStatus = data.DownLoadInfo.Status;
     let oldIndex;
-    console.log('更換:'+chgStatus);
+    //console.log('更換:'+chgStatus);
     if(global.ProgramData.DownLoadOrder[oldStatus])
       oldIndex = global.ProgramData.DownLoadOrder[oldStatus].indexOf(data.Id);
-    console.log('order:'+oldIndex);
+    //console.log('order:'+oldIndex);
     if(oldIndex!=undefined)//沒有舊資料
     global.ProgramData.DownLoadOrder[oldStatus].splice( oldIndex, 1);//移除
     if(global.ProgramData.DownLoadOrder[Status[chgStatus]])
@@ -87,7 +87,11 @@ const Status = require('./status');
       }
     }
   }
-
+  //取得狀態
+  exports.isPause = ( id ) => {
+    let status = global.Data.Datas[id].DownLoadInfo.Status;
+    return status==Status.PAUSE;
+  }
 
   /*exports.download_file = function ( id, func){
       if(!data.data[id].pause){
