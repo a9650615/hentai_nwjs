@@ -3,13 +3,14 @@ var exports = module.exports = {};
 var http = require('http');
 
 var data = {
-	cookie : 'ipb_member_id=1886830;ipb_pass_hash=3810cc5bb92e67242ab932646b6d9c56;ipb_session_id=41fc9128524537bbc6d51216b43bea3a;',
+	cookie: 'yay=louder; SL_GWPT_Show_Hide_tmp=1; SL_wptGlobTipTmp=1; ipb_member_id=2782198; ipb_pass_hash=5da4bd53ba861541b8e2c60f07308ba2; ipb_session_id=ff6088e599f3cc9a17a49cb9f61c2ac4; igneous=05336c39e; sk=fxuqiqo3741kvam1w6epif7cm1l5;',
+	// cookie : 'ipb_member_id=1886830;ipb_pass_hash=3810cc5bb92e67242ab932646b6d9c56;ipb_session_id=41fc9128524537bbc6d51216b43bea3a;',
 	data   : JSON.stringify({ })
 }; 
 
 var options = {
      host: global.Data.data.base.replace('http://',''),
-     port: 80,
+     port: 443,
      path: '/',
      method: 'GET',
      headers: {
@@ -35,7 +36,8 @@ exports.load_url = function ( url, returnfuc, times){
 		  });
 		  
 		  res.on('end', function (part) {
-		        returnfuc( html, res);
+						returnfuc( html, res);
+						console.log(html)
 		  });
 
 		  res.on('error',function(e){

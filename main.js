@@ -1,10 +1,10 @@
-var app = require('app');  // Module to control application life.
-var BrowserWindow = require('browser-window');  // Module to create native browser window.
+const {app, BrowserWindow} = require('electron')  // Module to control application life.
+// var BrowserWindow = require('browser-window');  // Module to create native browser window.
 //var window_controll = require(__dirname+'/window_controll');
 //var Toaster = require('electron-toaster');
 //var toaster = new Toaster();
 // Report crashes to our server.
-require('crash-reporter').start();
+// require('crash-reporter').start();
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -24,10 +24,15 @@ app.on('window-all-closed', function() {
 // initialization and is ready to create browser windows.
 app.on('ready', function() {
   // Create the browser window.
-  mainWindow = new BrowserWindow({width: 700, height: 500, 'min-height': 300,  'min-width': 550});
+  mainWindow = new BrowserWindow({
+    width: 700, height: 500, 'min-height': 300,  'min-width': 550,
+    webPreferences: {
+      nodeIntegration: true
+    }
+  });
   //toaster.init(mainWindow);
   // and load the index.html of the app.
-  mainWindow.loadUrl('file://' + __dirname + '/index.html');
+  mainWindow.loadURL('file://' + __dirname + '/index.html');
 
   // Open the DevTools.
   //mainWindow.openDevTools();

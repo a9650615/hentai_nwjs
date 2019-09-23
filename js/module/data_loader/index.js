@@ -1,7 +1,9 @@
 var exports = module.exports = {};
 
 var http = require('http');
-var request = require('request');
+const axios = require('axios')
+const cheerio = require('cheerio')
+// var request = require('request');
 
 var data = {
 	cookie : global.Setting.UserCookie,
@@ -9,16 +11,22 @@ var data = {
 };
 
 var options = {
-     host: global.Data.data.base.replace('http://',''),
-     port: 80,
-     path: '/',
-     method: 'GET',
-     headers: {
+    //  host: global.Data.data.base.replace('http://',''),
+    //  baseUrl: global.Data.data.base,
+    //  port: 443,
+		//  path: '/',
+		url: global.Data.data.base,
+		method: 'get',
+		headers: {
+				// 'Content-Type': 'application/x-www-form-urlencoded',
         'User-Agent': 'Mozilla/5.0 (X11; Linux i686) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.64 Safari/537.11',
-        'Cookie': data.cookie,
+        'Cookie': 'yay=louder; SL_GWPT_Show_Hide_tmp=1; SL_wptGlobTipTmp=1; ipb_member_id=2782198; ipb_pass_hash=5da4bd53ba861541b8e2c60f07308ba2; ipb_session_id=ff6088e599f3cc9a17a49cb9f61c2ac4; igneous=05336c39e; sk=fxuqiqo3741kvam1w6epif7cm1l5;',
         'Accept': '/',
         'Connection': 'keep-alive'
-    }
+		},
+		responseType: 'text',
+		withCredentials: true,
+		timeout: 60000
 };
 
 exports.change_cookie = () => {
@@ -27,36 +35,41 @@ exports.change_cookie = () => {
 }
 
 exports.load_url = function ( url, returnfuc){
-	exports.change_cookie();
+	// exports.change_cookie();
 	var html = '';
-	options.path = (url?'/'+url:null) || '/';
-	//console.log(options.path);
-	//console.log('loading:'+options.path);
-	var request = http.request(options , function( res){
-		  //console.log('STATUS: ' + res.statusCode);
-		  //console.log('HEADERS: ' + JSON.stringify(res.headers));
-		  res.setEncoding('utf8');
-		  //´æÈ¡ÙYÁÏÖÐ
-		  res.on('data', function (chunk) {	
-		    html += chunk;
-		  });
+	options.url = global.Data.data.base+(url?'/'+url:null) || '/';
+	console.log(options);
+	console.log('loading:'+options.url);
+	// var request = http.request(options , function( res){
+	// 	  //console.log('STATUS: ' + res.statusCode);
+	// 	  //console.log('HEADERS: ' + JSON.stringify(res.headers));
+	// 		res.setEncoding('utf8');
+	// 	  //´æÈ¡ÙYÁÏÖÐ
+	// 	  res.on('data', function (chunk) {	
+	// 	    html += chunk;
+	// 	  });
 		  
-		  res.on('end', function (part) {
-		        returnfuc( html, res, null);
-		  });
+	// 	  res.on('end', function (part) {
+	// 					returnfuc( html, res, null);
+	// 					console.log(html)
+	// 	  });
 
-		  res.on('error',function(e){
-		  	global.Service.report( 'data_loader', e);
-		  });
-	});
+	// 	  res.on('error',function(e){
+	// 	  	global.Service.report( 'data_loader', e);
+	// 	  });
+	// });
 	
-	request.on('error',function(e){
-   		console.log("Error: \n" + e.message); 
-   		console.log( e.stack );
-   		//returnfuc( html, res, e);
-   		exports.load_url( url, returnfuc);
-	});
-	request.end();
+	// request.on('error',function(e){
+  //  		console.log("Error: \n" + e.message); 
+  //  		console.log( e.stack );
+  //  		//returnfuc( html, res, e);
+  //  		exports.load_url( url, returnfuc);
+	// });
+	// request.end();
+	axios.request(options).then((response) => {
+		// console.log(returnfuc);
+		returnfuc( response.data, {}, null);
+	})
 }
 
 var $ = window.$;
@@ -66,7 +79,8 @@ var praser = {
 	_p : function( html){
 		this.data = {};
 		try{
-			this.html =  window.$(html);
+			// this.html =  window.$(html);
+			this.html = cheerio.load(html)
 		}catch(e){
 
 		};
@@ -78,41 +92,67 @@ var praser = {
 		this._p(html);
 		var rank = 0,data={},t;
 		try{
-			this.html.find('tr.gtr0,tr.gtr1').each(function(i,e){
-				//console.log(e);
-				rank = 0;
-				t = $(this);
+			this.html('.gltc tr:not(:first-child)').each(function(i,e){
+				// console.log(e);
+				// rank = 0;
+				// t = cheerio.load(this);
+				// data[i] = {};
+				// data[i].type= t('td.itdc>a>img').attr('alt');
+				// data[i].publish = t('td.itd').first().text();
+				// if(i==0)
+				// data[i].img = t('td.itd:eq(1)>div>div.it2>img').attr('src');
+				// else{
+				// 	data[i].img = t('td.itd:eq(1)>div>div.it2').text().split('~');
+				// 	data[i].img = 'http://'+data[i].img[1]+'/'+data[i].img[2];
+				// }
+				// data[i].name = t('td.itd').eq(1).find('div>div.it5>a').text();
+				// data[i].href = t('td.itd:eq(1)>div>div.it5>a').attr('href');
+				// data[i].torrent = t('td.itd:eq(1)>div>div.it3>div>a').attr('href');
+				// data[i].rank = t('td.itd:eq(1)>div>div.it4>div.it4r').css('background-position');
+				// data[i].rank = data[i].rank.match(/[+\-]?\d*px/g);
+				// if(data[i].rank[1]=='-21px'){
+				// 	rank -= 0.5;
+				// };
+				// rank+=5+(parseInt(data[i].rank[0])/16);
+				// data[i].rank = rank;
+				// data[i].uploader={
+				// 	href : t('td.itu>div>a').attr('href'),
+				// 	name : t('td.itu>div>a').text()
+				// }; 
+				const rank = 0, t = cheerio.load(this), itdEq1 = t('td.itd').eq(1);
 				data[i] = {};
-				data[i].type= t.find('td.itdc>a>img').attr('alt');
-				data[i].publish = t.find('td.itd:first').text();
-				if(i==0)
-				data[i].img = t.find('td.itd:eq(1)>div>div.it2>img').attr('src');
-				else{
-					data[i].img = t.find('td.itd:eq(1)>div>div.it2').text().split('~');
-					data[i].img = 'http://'+data[i].img[1]+'/'+data[i].img[2];
-				}
-				data[i].name = t.find('td.itd:eq(1)>div>div.it5>a').text();
-				data[i].href = t.find('td.itd:eq(1)>div>div.it5>a').attr('href');
-				data[i].torrent = t.find('td.itd:eq(1)>div>div.it3>div>a').attr('href');
-				data[i].rank = t.find('td.itd:eq(1)>div>div.it4>div.it4r').css('background-position');
-				data[i].rank = data[i].rank.match(/[+\-]?\d*px/g);
-				if(data[i].rank[1]=='-21px'){
-					rank -= 0.5;
-				};
-				rank+=5+(parseInt(data[i].rank[0])/16);
-				data[i].rank = rank;
-				data[i].uploader={
-					href : t.find('td.itu>div>a').attr('href'),
-					name : t.find('td.itu>div>a').text()
-				}; 
+				data[i].type= t('td.gl1c>div').text();
+				// data[i].publish = t('td.itd').first().text();
+				console.log(t('.gl2c>.glthumb').html())
+				data[i].img = t('.gl2c>.glthumb>div').eq(0).find('img').attr('src')
+				// if(i !== 0){
+				// 	data[i].img = itdEq1.find('div>div.it2').text().split('~');
+				// 	data[i].img = 'http://'+data[i].img[1]+'/'+data[i].img[2];
+				// }
+				// data[i].title = itdEq1.find('div>div.it5>a').text();
+				// data[i].href = itdEq1.find('div>div.it5>a').attr('href');
+				// // data[i].data = data[i].href.replace(`${API_HOST}g/`, '').split('/').splice(0, 2);
+				// data[i].torrent = itdEq1.find('>div>div.it3>div>a').attr('href');
+				// data[i].rank = itdEq1.find('div>div.it4>div.it4r').css('background-position');
+				// data[i].rank = data[i].rank.match(/[+\-]?\d*px/g);
+				// if (data[i].rank[1]=='-21px') {
+				// 	rank -= 0.5;
+				// }
+				// rank+= 5 + (parseInt(data[i].rank[0])/16);
+				// data[i].rank = rank;
+				// data[i].uploader={
+				// 	href : t('td.itu>div>a').attr('href'),
+				// 	name : t('td.itu>div>a').text()
+				// };
 			});
-			var end = this.html.find('p.ip').text().split('of');
+			var end = this.html('p.ip').text().split('of');
 			var notend = end[0].split('-')[1];
 			data.end = notend == end[1] ? true:false;
 			this.data = data;
+			console.log(this.data)
 			this.ret( req);
 		}catch(e){
-
+			console.log(e)
 		};
 	}, // Ö÷í“Ãæ½âÎö
 	g : function( html, req, url){ // 取得詳細頁面
@@ -219,46 +259,53 @@ exports.parseData = function ( type, data , req){
 
 exports.parseImage = function( url, id, returnfuc){
 	var opt = options;
+	opt.url = url
+	opt.responseType= 'arraybuffer'
 	//opt.path = url.replace(global.Data.data.base,'');
-	var url = url.replace('http://','').replace('https://','');
-	opt.host = url.split('/')[0];
-	opt.path = url.replace(opt.host,'');
-	//console.log(options.host + url.replace(global.Data.data.base,''));
-	var data = [];	
-	//console.log(options.path);
-	//console.log('loading:'+options.path);
-	var request = http.request(opt , function( res){
-		  //console.log('STATUS: ' + res.statusCode);
-		  //console.log('HEADERS: ' + JSON.stringify(res.headers));
-		  //res.setEncoding('utf8');
-		  res.setEncoding('binary'); // this
-		  //´æÈ¡ÙYÁÏÖÐ
-		  res.on('data', function (chunk) {	
-			//data.push(chunk);
-		  	data.push(chunk);
-		  });
+	// var url = url.replace('http://','').replace('https://','');
+	// opt.host = url.split('/')[0];
+	// opt.path = url.replace(opt.host,'');
+	// //console.log(options.host + url.replace(global.Data.data.base,''));
+	// var data = [];	
+	// //console.log(options.path);
+	// //console.log('loading:'+options.path);
+	// var request = http.request(opt , function( res){
+	// 	  //console.log('STATUS: ' + res.statusCode);
+	// 	  //console.log('HEADERS: ' + JSON.stringify(res.headers));
+	// 	  //res.setEncoding('utf8');
+	// 	  res.setEncoding('binary'); // this
+	// 	  //´æÈ¡ÙYÁÏÖÐ
+	// 	  res.on('data', function (chunk) {	
+	// 		//data.push(chunk);
+	// 	  	data.push(chunk);
+	// 	  });
 		  
-		  res.on('end', function (part) {
-		        /*var fs = require('fs');
-		        fs.writeFile('logo.jpeg', data, 'binary', function(err){
-		                    if (err) throw err
-		                    console.log('File saved.')
-		        });
-				*/
-		        returnfuc( "data:" + res.headers["content-type"] + ";base64," +  window.btoa(data.join('')), id);
-		  });
+	// 	  res.on('end', function (part) {
+	// 	        /*var fs = require('fs');
+	// 	        fs.writeFile('logo.jpeg', data, 'binary', function(err){
+	// 	                    if (err) throw err
+	// 	                    console.log('File saved.')
+	// 	        });
+	// 			*/
+	// 	        
+	// 	  });
 
-		  res.on('error',function(e){
-		  	global.Service.report( 'data_loader', e);
-		  });
-	});
+	// 	  res.on('error',function(e){
+	// 	  	global.Service.report( 'data_loader', e);
+	// 	  });
+	// });
 	
-	request.on('error',function(e){
-   		console.log("Error: \n" + e.message); 
-   		console.log( e.stack );
-	});
-	request.end();
-	
+	// request.on('error',function(e){
+  //  		console.log("Error: \n" + e.message); 
+  //  		console.log( e.stack );
+	// });
+	// request.end();
+	console.log(url)
+	returnfuc( url, id);
+	// axios.request(opt).then((response) => {
+	// 	console.log(response)
+	// 	returnfuc( "data:" + response.headers["content-type"] + ";base64," +  new Buffer(response.data, 'binary').toString('base64'), id);
+	// })
 }
 //'http://exhentai.org/t/79/c3/79c339dffe2597b61357810c26d74271fb3522f1-7755153-3000-4204-png_l.jpg'
 /*

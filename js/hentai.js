@@ -1,16 +1,20 @@
 //global.gui     = require('nw.gui');
+const electron = require('electron')
+const remote = electron.remote
+const app = electron.remote.app
+// const global = window
 global.Data    = {};
 //var gui = require('nw.gui');
 //var win = gui.Window.get();
-global.__dir = __dirname;
+global.__dir = app.getAppPath();
 var path = require('path');
 var nwPath = process.execPath;
 var nwDir = path.dirname(nwPath);
 window.$ = window.jQuery = require('./js/extend/jquery-1.11.3.js');
 global.$ = window.$;
 global.UserService = require('./js/module/UserService');
-var remote = require('remote');
-var dialog = remote.require('dialog');
+// var remote = require('remote');
+var dialog = remote.dialog;
 const shell = require('electron').shell;
 
 global.Setting = require('./js/setting.js');
@@ -24,10 +28,10 @@ var LoginContent = require('./js/view/login/login.js');
 var MenuContent = require('./js/view/menu/menu.js');
 
 /*錯誤處理*/
-process.on('uncaughtException', function (er) {
-  console.log(er);
-  console.log(er.stack)
-});
+// process.on('uncaughtException', function (er) {
+//   console.log(er);
+//   console.log(er.stack)
+// });
 
 window.addEventListener('error' ,function(errEvent){
    /* console.log(
@@ -45,7 +49,7 @@ function Hentai($){
   global.$ = $; // 定義全域
   var fs = require('fs'); // require only if you don't already have it
   //var mkdirp = require('mkdirp');
-  var request = require('request');
+  // var request = require('request');
   //var remote = require("remote");
   //var ipc = require('ipc');
   //dialog.showMessageBox({message:mainWindow});
@@ -67,7 +71,7 @@ function Hentai($){
     'list'   : true
   };
   var data = {
-    base : 'http://exhentai.org' ,/*'http://yeeee.ddns.net:8008/index.php/api/'*/
+    base : 'https://exhentai.org' ,/*'http://yeeee.ddns.net:8008/index.php/api/'*/
     end  : '',
     page : 1 ,
     nowdata:[],
@@ -165,11 +169,11 @@ function Hentai($){
   };
 
   function save_setting(){
-    fs.writeFile(nwDir+'/setting.json',JSON.stringify(setting));
+    fs.writeFile(nwDir+'/setting.json',JSON.stringify(setting), () => {});
   };
 
   function save_data(func){
-    fs.writeFile(nwDir+'/data.json',JSON.stringify(data),func);
+    fs.writeFile(nwDir+'/data.json',JSON.stringify(data),func, () => {});
   };
 
 
@@ -328,10 +332,13 @@ function Hentai($){
 
     $('#view4-dir-path').on('click',function(){
         //console.log(dialog.showOpenDialog({ properties: [ 'openFile', 'openDirectory']}));
-        setting.path = (dialog.showOpenDialog({ properties: [ 'openFile', 'openDirectory']}) || setting.path);
-        if(setting.path.slice(-1) != '/') setting.path += '/';
-        $('#view4-dir-view-path').val(setting.path);
-        save_setting();
+        (dialog.showOpenDialog({ properties: [ 'openFile', 'openDirectory']}) || setting.path).then((result) => {
+          setting.path = result.filePaths[0]
+          if(setting.path.slice(-1) != '/') setting.path += '/';
+          $('#view4-dir-view-path').val(setting.path);
+          save_setting();
+        });
+        
     });
     /*$('#view4-dir-path').attr('nwworkingdir',setting.path).bind('change',function(){
       //var path_selector = remote.getGlobal('Path_Selector');

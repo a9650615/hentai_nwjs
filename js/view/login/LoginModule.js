@@ -10,7 +10,7 @@ let LoginSetting = {
 	CookieDate: 1
 };
 
-let exhentaiURL = 'http://exhentai.org/';
+let exhentaiURL = 'https://exhentai.org/';
 
 exports.Login = ( username, password) => {
 	let
