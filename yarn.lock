@@ -580,9 +580,9 @@ electron-osx-sign@^0.3.0:
     minimist "^1.1.1"
     run-series "^1.1.1"
 
-electron-packager@^6.0.0:
-  version "6.0.2"
-  resolved "https://registry.yarnpkg.com/electron-packager/-/electron-packager-6.0.2.tgz#8ee00669fe8a36309502732fcfed117d7ee9ac29"
+electron-packager@^7.0.0:
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/electron-packager/-/electron-packager-7.0.0.tgz#e9337f10a0b3d5dd9b93df0a992fb278dcd95b70"
   dependencies:
     asar "^0.11.0"
     electron-download "^2.0.0"
@@ -591,14 +591,9 @@ electron-packager@^6.0.0:
     fs-extra "^0.26.5"
     get-package-info "0.0.2"
     minimist "^1.1.1"
-    mkdirp "^0.5.0"
-    mv "^2.0.3"
-    ncp "^2.0.0"
-    object-assign "^4.0.1"
     plist "^1.1.0"
     rcedit "^0.5.0"
     resolve "^1.1.6"
-    rimraf "^2.3.2"
     run-series "^1.1.1"
 
 electron@^6.0.10:
@@ -1702,7 +1697,7 @@ natives@^1.1.3:
   version "1.1.6"
   resolved "https://registry.yarnpkg.com/natives/-/natives-1.1.6.tgz#a603b4a498ab77173612b9ea1acdec4d980f00bb"
 
-ncp@^2.0.0, ncp@~2.0.0:
+ncp@~2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/ncp/-/ncp-2.0.0.tgz#195a21d6c46e361d2fb1281ba38b91e9df7bdbb3"
 
@@ -2166,7 +2161,7 @@ ret@~0.1.10:
   version "0.1.15"
   resolved "https://registry.yarnpkg.com/ret/-/ret-0.1.15.tgz#b8a4825d5bdb1fc3f6f53c2bc33f81388681c7bc"
 
-rimraf@^2.2.8, rimraf@^2.3.2:
+rimraf@^2.2.8:
   version "2.7.1"
   resolved "https://registry.yarnpkg.com/rimraf/-/rimraf-2.7.1.tgz#35797f13a7fdadc566142c29d4f07ccad483e3ec"
   dependencies:
